@@ -1,0 +1,5 @@
+Minimum Requirements for Class Project:
+
+1) User Interface Deign
+2) Database Design
+3) Connection between frontend user interface and backend database
