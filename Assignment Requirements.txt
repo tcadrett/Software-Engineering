@@ -1,5 +1,22 @@
 Minimum Requirements for Class Project:
 
-1) User Interface Deign
+1) User Interface Design
 2) Database Design
 3) Connection between frontend user interface and backend database
+
+[ ] Browse Similar Apps
+[ ] Fill project description template
+[ ] Submit template
+[X] Create google meet / chat
+[ ] 
+
+
+For the Project Description:
+
+	User Type	|	Developed By
+----------------+------------------
+Public			|
+Account Holder	|
+Clerk			|
+Administrator	|
+Maintenence		|
