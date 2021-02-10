@@ -29,25 +29,75 @@ Public			|	Oliver
 Account Holder	|	Guadalupe
 Clerk			|	Oliver
 Administrator	|	Terri
-Maintenence		|	Terri
+Maintenance		|	Terri
 
 
 ###Functionalities:
 
 Public
-
+  Functionality
+    Apply for account
+  Data
 
 Account Holder
-
+  Functionality
+    View account histories
+	View account balances
+	Make or recieve direct payments (to others & to the bank)
+	View loans (and their interest rates)
+  Data
+    Checking Account
+	  Current Balance
+	  Current Availability
+	  List of transactions
+	Savings Acccount
+	  Current Balance
+	  Current Availability
+	  List of transactions
+	Loans
+	  Loan balances
+	  Loan interest
+	  Loan minimum payment
+	  Loan payment due date
+	Credit Cards
+	  Card numbers and associated account
+	Personal Information
+	  First Name
+	  Last Name
+	  Phone
+	  Email
+	  Address
 
 Clerk
+  Functionality
+    Access to staff portal
+  Data
+    Login credentials
+    Staff ID
+	fName
+	lName
+	Birthday
+	Gender
+	hire date
 
 
 Admin
-
-
+  Functionality
+    All clerk functionality
+    Manage user accounts (Clerks & Holders)
+      Approve and remove holders
+    Halt transactions
+    Push transactions
+    View summary stats
+  Data
+    Login credentials
+  
 Maintenence
-
+  Functionality
+    Reset Systems
+    Access database summary
+  Data
+    Login credentials
 
 
 ### Project Construction
