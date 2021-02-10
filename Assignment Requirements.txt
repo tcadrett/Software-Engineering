@@ -11,7 +11,16 @@ Minimum Requirements for Class Project:
 [ ] 
 
 
-For the Project Description:
+
+We will be developing an app for a bank.
+
+What will the app be used for?
+Who will use it?
+What tasks will the app host (the bank) be required to do?
+What data will we store? For whom and where?
+
+
+### For the Project Description:
 
 	User Type	|	Developed By
 ----------------+------------------
@@ -20,3 +29,28 @@ Account Holder	|
 Clerk			|
 Administrator	|
 Maintenence		|
+
+
+###Functionalities:
+
+Public
+
+
+Account Holder
+
+
+Clerk
+
+
+Admin
+
+
+Maintenence
+
+
+
+### Project Construction
+
+Language: 
+Database: 
+Host: 
