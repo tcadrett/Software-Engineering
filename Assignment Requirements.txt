@@ -12,6 +12,7 @@ Minimum Requirements for Class Project:
 
 
 
+
 We will be developing an app for a bank.
 
 What will the app be used for?
@@ -24,11 +25,11 @@ What data will we store? For whom and where?
 
 	User Type	|	Developed By
 ----------------+------------------
-Public			|
-Account Holder	|
-Clerk			|
-Administrator	|
-Maintenence		|
+Public			|	Oliver
+Account Holder	|	Guadalupe
+Clerk			|	Oliver
+Administrator	|	Terri
+Maintenence		|	Terri
 
 
 ###Functionalities:
