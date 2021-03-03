@@ -5,10 +5,10 @@ Minimum Requirements for Class Project:
 3) Connection between frontend user interface and backend database
 
 [ ] Browse Similar Apps
-[ ] Fill project description template
-[ ] Submit template
+[X] Fill project description template
+[X] Submit template
 [X] Create google meet / chat
-[ ] 
+[X] Create use case diagram
 
 
 
@@ -102,6 +102,6 @@ Maintenence
 
 ### Project Construction
 
-Language: 
-Database: 
-Host: 
+Language: Java/Javascript/Html5
+Database: mySQL
+Host: Web Host
