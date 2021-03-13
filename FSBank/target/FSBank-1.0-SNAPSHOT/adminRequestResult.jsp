@@ -1,5 +1,5 @@
 <%-- 
-    Document   : accountRequest
+    Document   : admin account creation result page
     Created on : Mar 10, 2021, 12:03:01 PM
     Author     : Terri
 --%>
