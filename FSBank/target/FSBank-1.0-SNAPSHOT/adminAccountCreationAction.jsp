@@ -13,33 +13,41 @@
     <%@include file="header.jsp" %>
   </head>
   <body>
-    <h1>AccountCreationAction</h1>
+    <div class="w3-container">
+      <h1>AccountCreationAction</h1>
 
-    <%
-      dbConnect dbconnect = new dbConnect();
-      String FName = request.getParameter("FirstName");
-      String LName = request.getParameter("LastName");
-      String Email = request.getParameter("Email");
-      String Phone = dbconnect.cleanPhone(request.getParameter("Phone"));
-      String AccountType = request.getParameter("AccountType");
-      String defaultUsername = FName.substring(0, 1) + LName;
-      String defaultPWD = FName.substring(0, 1).toLowerCase() + LName.substring(0, 1) + Phone + "!";
+      <%
+        dbConnect dbconnect = new dbConnect();
+        String FName = request.getParameter("FirstName");
+        String LName = request.getParameter("LastName");
+        String Email = request.getParameter("Email");
+        String Phone = dbconnect.cleanPhone(request.getParameter("Phone"));
+        String AccountType = request.getParameter("AccountType");
+        String defaultUsername = FName.substring(0, 1) + LName;
+        String defaultPWD = FName.substring(0, 1).toLowerCase() + LName.substring(0, 1) + Phone + "!";
 
-      /*
-        // DEBUG: getParameter
-        out.print("<p>" + FName + "</p>");
-        out.print("<p>" + LName + "</p>");
-        out.print("<p>" + Email + "</p>");
-        out.print("<p>" + Phone + "</p>");
-        out.print("<p>" + AccountType + "</p>");
-        out.print("<p>" + defaultUsername + "</p>");
-        out.print("<p>" + defaultPWD + "</p>");
-       */
+        /*
+          // DEBUG: getParameter
+          out.print("<p>" + FName + "</p>");
+          out.print("<p>" + LName + "</p>");
+          out.print("<p>" + Email + "</p>");
+          out.print("<p>" + Phone + "</p>");
+          out.print("<p>" + AccountType + "</p>");
+          out.print("<p>" + defaultUsername + "</p>");
+          out.print("<p>" + defaultPWD + "</p>");
+         */
  /*
-        // Variables for creating usernames when defaultUsername is taken.
-        String backupUsername = defaultUsername;
-        int backupCount = 1;
-        String[] QueryResult = {};
+          // Variables for creating usernames when defaultUsername is taken.
+          String backupUsername = defaultUsername;
+          int backupCount = 1;
+          String[] QueryResult = {};
+          if (AccountType.equals("0") || AccountType.equals("1")) {
+            QueryResult = dbconnect.queryDB("Select Username FROM accounts WHERE Username = ?;", backupUsername);
+          }
+         */
+        String result = "";
+        String sql = "";
+        // Create New Account
         if (AccountType.equals("0") || AccountType.equals("1")) {
           QueryResult = dbconnect.queryDB("Select Username FROM accounts WHERE Username = ?;", backupUsername);
         }
@@ -61,31 +69,44 @@
           out.print("<p>Username: " + "</p>");
           out.print("<p>Password: " + defaultPWD + "</p>");
 
-          switch (AccountType.charAt(0)) {
-            case '0':
-              out.print("<p>Account Type: Suspended</p>");
-              break;
-            case '1':
-              out.print("<p<Account Type: Account Holder</p>");
-              break;
+
+            switch (AccountType.charAt(0)) {
+              case '0':
+                out.print("<p>Account Type: Suspended</p>");
+                break;
+              case '1':
+                out.print("<p<Account Type: Account Holder</p>");
+                break;
+            }
+            out.print("<p>" + defaultUsername + "</p>");
+            out.print("<p>" + defaultPWD + "</p>");
           }
-          out.print("<p>" + defaultUsername + "</p>");
-          out.print("<p>" + defaultPWD + "</p>");
+        } else if (AccountType.equals("2") || AccountType.equals("3")) {
+
+          sql = "INSERT INTO clerk (ClerkID, FName, LName, Email, Password) VALUES (0, ?, ?, ?, ?);";
+          result = dbconnect.updateDB(sql, FName, LName, Email, defaultPWD);
+          if (result.equals("CLOSED")) {
+            out.print("<h2>Account for " + FName + " " + LName + " has been created.</h2>");
+            out.print("<p>First Name: " + FName + "</p>");
+            out.print("<p>Last Name: " + LName + "</p>");
+            out.print("<p>Email: " + Email + "</p>");
+            out.print("<p>Password: " + defaultPWD + "</p>");
+            switch (AccountType.charAt(0)) {
+              case '2':
+                out.print("<p>Account Type: Clerk</p>");
+                break;
+              case '3':
+                out.print("<p<Account Type: Administrator</p>");
+                break;
+            }
+          }
         }
-      } else if (AccountType.equals("2") || AccountType.equals("3")) {
 
-        sql = "INSERT INTO clerk (ClerkID, FName, LName, Email, Password) VALUES (0, ?, ?, ?, ?);";
-        result = dbconnect.updateDB(sql, FName, LName, Email, defaultPWD);
-        if (result.equals("CLOSED")) {
-          out.print("<h2>Account for " + FName + " " + LName + " has been created.</h2>");
-          out.print("<p>First Name: " + FName + "</p>");
-          out.print("<p>Last Name: " + LName + "</p>");
-          out.print("<p>Email: " + Email + "</p>");
-          out.print("<p>Password: " + defaultPWD + "</p>");
-        }
-      }
+      %>
+      <div class="w3-margin"></div>
+      <p><a href="adminViewRequest.jsp">Return to Requests</a></p>
 
-    %>
-
-  </body>
+    </div>
+  </div>
+</body>
 </html>
