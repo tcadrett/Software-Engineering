@@ -14,7 +14,7 @@ public class dbConnect {
   // Connection strings
 
   private final String driver = "com.mysql.jdbc.Driver";
-  private final String url = "jdbc:mysql://localhost:3306/settleshop";
+  private final String url = "jdbc:mysql://localhost:3306/fsbank";
   private final String user = "mahadev";
   private final String pwd = "mahadev";
 
@@ -72,14 +72,105 @@ public class dbConnect {
     return "";
   }
 
-  public String htmlListQuery() {
-    return "";
+  /**
+   *
+   * @param sql SQL statement
+   * @param delim Delimiters
+   * @param liStyle style to add to <li> element
+   * @return  <li></li> from sql statement
+   */
+  public String htmlListQuery(String sql, String delim, String liStyle) {
+    String html = "";
+    String output = openDB(); // open connection to database
+    if (output.equals("OPEN")) {
+      try {
+        rst = stm.executeQuery(sql);  // execute sql query - results in rst
+        rsmd = rst.getMetaData();           // } Get column count
+        int noCol = rsmd.getColumnCount();  // |
+
+        while (rst.next()) {
+          html += "<li " + liStyle +">";
+          for (int i = 1; i <= noCol; i++) {  // add val
+            html += rst.getString(i) + delim;
+          }
+          html += "</li>\n";
+        }
+
+        return html;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return output;
+    }
+
   }
 
-  public String htmlTableQuery() {
-    return "";
+  
+  // TODO: Further generalize HTML table function
+  /**
+   *
+   * @param sql SQL Statement
+   * @param type "Head" or "Headless"
+   * @param headStyle html style to add to the header row
+   * @param rowStyle html style to add to data rows
+   * @param headCellStyle html style to add to header cells
+   * @param rowCellStyle html style to add to row cells
+   * @param headAddi additional html to go at the end of the header row
+   * @param rowaddi additional html to go at the end of the data rows
+   * @return
+   */
+  public String htmlTableQuery(String sql, String type, String headStyle, String rowStyle, String headCellStyle, String rowCellStyle, String headAddi, String rowAddi) {
+    String html = "";
+    String output = openDB(); // open connection to database
+    if (output.equals("OPEN")) {
+      try {
+        rst = stm.executeQuery(sql);  // execute sql query - results in rst
+        rsmd = rst.getMetaData();           // } Get column count
+        int noCol = rsmd.getColumnCount();  // |
+
+        switch (type) {
+          case "Head":
+            // create column headings
+            html += "<tr " + headStyle + ">\n";
+            for (int i = 0; i < noCol; i++) {
+              html += "<th " + headCellStyle + ">" + rsmd.getColumnName(i + 1) + "</th>\n";
+            }
+            html += headAddi;
+            html += "</tr>\n";
+            // create rows
+            while (rst.next()) {
+              html += "<tr " + rowStyle + ">";
+              for (int i = 0; i < noCol; i++) {
+                html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+              }
+              html += rowAddi;
+              html += "</tr>\n";
+            }
+            break;
+          case "Headless":
+            // create rows
+            while (rst.next()) {
+              html += "<tr " + rowStyle + ">";
+              for (int i = 0; i < noCol; i++) {
+                html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+              }
+              html += rowAddi;
+              html += "</tr>\n";
+            }
+            break;
+        }
+
+        return html;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return output;
+    }
   }
 
+  
   // Validate login credentials
   public String[] loginCred() {
     String[] result = {""};
@@ -92,16 +183,26 @@ public class dbConnect {
    * @return String[]
    */
   public String[] queryDB(String... input) {
+    System.out.println("Begin Query DB");
     String out = openDB(); // open the database connection
+    System.out.println("Opened DB");
+
     if (out.equals("OPEN")) {
+      System.out.println("DB Open");
       try {
         int noArgs = input.length;
+
         pstm = conn.prepareStatement(input[0]);
-        for (int i = 0; i < noArgs; i++) {
-          pstm.setString(i, input[i]);
+
+        System.out.println(pstm);
+
+        for (int i = 1; i < noArgs; i++) {
+          pstm.setString(i, input[i]);      /// ERROR HERE
         }
+        System.out.println(pstm);
 
         rst = pstm.executeQuery(); // Execute query
+
         rsmd = rst.getMetaData(); // get result metadata
 
         int noCol = rsmd.getColumnCount();  // construct output array
@@ -129,7 +230,7 @@ public class dbConnect {
       } catch (Exception e) {
         // SQL Failure
         String[] output = new String[1];
-        output[1] = "ERROR: " + e.getMessage();
+        output[0] = "ERROR: " + e.getMessage();
         return output;
       }
     } else {
@@ -141,7 +242,7 @@ public class dbConnect {
   }
 
   /**
-   * 
+   *
    * @param sql SQL statement
    * @return String
    */
@@ -149,12 +250,12 @@ public class dbConnect {
   private String updateDB(String sql) {
     String out = openDB();  // connect to database
     // if connection is successful
-    if(out.equals("OPENED")){
+    if (out.equals("OPENED")) {
       // try to execute the sql statement
       try {
         stm.executeUpdate(sql);
         out = closeDB();
-      } catch (Exception e){
+      } catch (Exception e) {
         out = e.getMessage(); // get error message if sql fails
       }
     }
