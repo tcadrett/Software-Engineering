@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2021 at 09:53 PM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.4
+-- Generation Time: Mar 14, 2021 at 11:21 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -37,6 +36,17 @@ CREATE TABLE `accountreq` (
   `accountType` int(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `accountreq`
+--
+
+INSERT INTO `accountreq` (`ReqID`, `FName`, `LName`, `Email`, `Phone`, `accountType`) VALUES
+(4, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1),
+(320, 'Jason', 'Dean', 'jDean', '', 0),
+(321, 'Jack', 'Johnson', 'jJohnson@hotmail.com', '4449997359', 0),
+(322, 'Alice', 'Jackson', 'aJackson@yahoo.com', '8946557736', 2),
+(323, 'Admin', 'Administrator', 'admin@FSBank.com', '8006447116', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -53,6 +63,15 @@ CREATE TABLE `accounts` (
   `Username` varchar(30) NOT NULL,
   `Password` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `accounts`
+--
+
+INSERT INTO `accounts` (`AcctID`, `FName`, `LName`, `Email`, `Phone`, `accountType`, `Username`, `Password`) VALUES
+(1, 'Admin', 'Administrator', '', '', 3, 'admin', 'admin'),
+(3, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1, 'JJoe', 'jJ7779995555!'),
+(4, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1, 'JJoe', 'jJ7779995555!');
 
 -- --------------------------------------------------------
 
@@ -77,11 +96,19 @@ CREATE TABLE `clerk` (
   `ClerkID` int(7) NOT NULL,
   `FName` varchar(30) NOT NULL,
   `LName` varchar(30) NOT NULL,
-  `Email` int(50) NOT NULL,
-  `Gender` varchar(10) NOT NULL,
-  `HireDate` date NOT NULL,
+  `Email` varchar(50) DEFAULT NULL,
+  `Gender` varchar(10) NOT NULL DEFAULT 'N/A',
+  `HireDate` date NOT NULL DEFAULT current_timestamp(),
   `Password` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `clerk`
+--
+
+INSERT INTO `clerk` (`ClerkID`, `FName`, `LName`, `Email`, `Gender`, `HireDate`, `Password`) VALUES
+(1, 'Test1', 'Test2', '0', '', '0000-00-00', 'Test4'),
+(2, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!');
 
 -- --------------------------------------------------------
 
@@ -182,10 +209,16 @@ ALTER TABLE `saving`
 --
 
 --
+-- AUTO_INCREMENT for table `accountreq`
+--
+ALTER TABLE `accountreq`
+  MODIFY `ReqID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=324;
+
+--
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `AcctID` int(7) NOT NULL AUTO_INCREMENT;
+  MODIFY `AcctID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `checking`
@@ -197,7 +230,7 @@ ALTER TABLE `checking`
 -- AUTO_INCREMENT for table `clerk`
 --
 ALTER TABLE `clerk`
-  MODIFY `ClerkID` int(7) NOT NULL AUTO_INCREMENT;
+  MODIFY `ClerkID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `credit card`
