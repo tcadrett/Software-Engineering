@@ -21,7 +21,7 @@
       }
        */%>
     -->
-    <div id="w3-container">
+    <div class="w3-container">
       <h1>Administrator Dashboard</h1>
 
       <p>
