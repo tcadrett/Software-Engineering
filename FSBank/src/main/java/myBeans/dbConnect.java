@@ -60,7 +60,12 @@ public class dbConnect {
   }
 
   /*-----------PUBLIC FUNCTIONS-----------------*/
-  //Clear non-numerical characters from input phone number.
+  /**
+   * Clear non-numerical characters from input phone number.
+   *
+   * @param phone
+   * @return String
+   */
   public String cleanPhone(String phone) {
     String out = phone.replace("-", "");
     out = out.replace(".", "");
@@ -89,7 +94,7 @@ public class dbConnect {
         int noCol = rsmd.getColumnCount();  // |
 
         while (rst.next()) {
-          html += "<li " + liStyle +">";
+          html += "<li " + liStyle + ">";
           for (int i = 1; i <= noCol; i++) {  // add val
             html += rst.getString(i) + delim;
           }
@@ -106,7 +111,6 @@ public class dbConnect {
 
   }
 
-  
   // TODO: Further generalize HTML table function
   /**
    *
@@ -117,7 +121,7 @@ public class dbConnect {
    * @param headCellStyle html style to add to header cells
    * @param rowCellStyle html style to add to row cells
    * @param headAddi additional html to go at the end of the header row
-   * @param rowaddi additional html to go at the end of the data rows
+   * @param rowAddi additional html to go at the end of the data rows
    * @return
    */
   public String htmlTableQuery(String sql, String type, String headStyle, String rowStyle, String headCellStyle, String rowCellStyle, String headAddi, String rowAddi) {
@@ -170,7 +174,51 @@ public class dbConnect {
     }
   }
 
-  
+  /**
+   *
+   * @param trStyle row style
+   * @param tdStyle cell style
+   * @return headless html table of account requests
+   */
+  public String viewAccountRequests(String trStyle, String tdStyle) {
+    String html = "";
+    String output = openDB();
+    if (output.equals("OPEN")) {
+      try {
+        String sql = "SELECT FName, LName, Email, Phone, accountType, ReqID FROM accountreq;";
+        rst = stm.executeQuery(sql);  // execute sql query - results in rst
+        rsmd = rst.getMetaData();           // } Get column count
+        int noCol = rsmd.getColumnCount();  // |
+
+        while (rst.next()) {
+          html += "<tr " + trStyle + ">";
+          // Fill columns
+          for (int i = 0; i < noCol - 1; i++) {
+            html += "<td " + tdStyle + ">";
+            html += rst.getString(i + 1);
+            html += "</td>";
+          }
+          // Add Action Buttons - Button name is "A-RequestID" or "D-RequestID"
+          html += "<td " + tdStyle + ">";
+          html += "<input type='submit' value='Accept' name='A" + rst.getString(noCol) + "'/>";
+          html += "</td>";
+
+          html += "<td " + tdStyle + ">";
+          html += "<input type='submit' value='Reject' name='R" + rst.getString(noCol) + "'/>";
+          html += "</td>";
+
+          html += "</tr>";
+        }
+        return html;
+
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return output;
+    }
+  }
+
   // Validate login credentials
   public String[] loginCred() {
     String[] result = {""};
@@ -247,10 +295,10 @@ public class dbConnect {
    * @return String
    */
   // Modify the database with an SQL statement
-  private String updateDB(String sql) {
+  public String updateDB(String sql) {
     String out = openDB();  // connect to database
     // if connection is successful
-    if (out.equals("OPENED")) {
+    if (out.equals("OPEN")) {
       // try to execute the sql statement
       try {
         stm.executeUpdate(sql);

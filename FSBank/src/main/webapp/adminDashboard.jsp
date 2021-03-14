@@ -9,9 +9,26 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JSP Page</title>
+    <title>FSBank</title>
+    <%@include file="header.jsp" %>
   </head>
   <body>
-    <h1>Hello World!</h1>
+
+    <!-- To be added when login functionality is implemented
+    <% /* // session control
+      if (session.getAttribute("logged") == null || !session.getAttribute("logged").equals("admin")) {
+        response.sendRedirect("staffLogin.jsp");
+      }
+       */%>
+    -->
+    <div id="w3-container">
+      <h1>Administrator Dashboard</h1>
+
+      <p>
+        <a href="adminViewRequest.jsp">View account Requests</a>
+      </p>
+
+    </div>
   </body>
+
 </html>
