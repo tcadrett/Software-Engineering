@@ -33,7 +33,6 @@
     %>
 
 
-
     <div class="w3-container">
       <h1>View Account Requests</h1>
     </div>

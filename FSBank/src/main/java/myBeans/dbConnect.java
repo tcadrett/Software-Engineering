@@ -194,8 +194,31 @@ public class dbConnect {
           html += "<tr " + trStyle + ">";
           // Fill columns
           for (int i = 0; i < noCol - 1; i++) {
+
             html += "<td " + tdStyle + ">";
-            html += rst.getString(i + 1);
+            if (i == 4) {
+              // decode account type
+              switch (rst.getString(i + 1)) {
+                case "0":
+                  html += "Suspended";
+                  break;
+                case "1":
+                  html += "Account Holder";
+                  break;
+                case "2":
+                  html += "Clerk";
+                  break;
+                case "3":
+                  html += "Administrator";
+                  break;
+                default:
+                  html += "N/A";
+                  break;
+              }
+            } else {
+              html += rst.getString(i + 1);
+
+            }
             html += "</td>";
           }
           // Add Action Buttons - Button name is "A-RequestID" or "D-RequestID"
@@ -245,7 +268,7 @@ public class dbConnect {
         System.out.println(pstm);
 
         for (int i = 1; i < noArgs; i++) {
-          pstm.setString(i, input[i]);      /// ERROR HERE
+          pstm.setString(i, input[i]);     
         }
         System.out.println(pstm);
 
@@ -295,14 +318,26 @@ public class dbConnect {
    * @return String
    */
   // Modify the database with an SQL statement
-  public String updateDB(String sql) {
+  public String updateDB(String... input) {
     String out = openDB();  // connect to database
     // if connection is successful
     if (out.equals("OPEN")) {
       // try to execute the sql statement
+      System.out.println("DB Open");
       try {
-        stm.executeUpdate(sql);
+        int noArgs = input.length;
+        pstm = conn.prepareStatement(input[0]);
+
+        System.out.println(pstm);
+
+        for (int i = 1; i < noArgs; i++) {
+          pstm.setString(i, input[i]);      
+        }
+        System.out.println(pstm);
+
+        pstm.executeUpdate(); // Execute query
         out = closeDB();
+        
       } catch (Exception e) {
         out = e.getMessage(); // get error message if sql fails
       }
