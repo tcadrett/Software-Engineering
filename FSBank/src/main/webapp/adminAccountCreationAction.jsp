@@ -47,7 +47,6 @@
       String result = "";
       String sql = "";
       // Create New Account
-      out.print(AccountType);
 
       if (AccountType.equals("0") || AccountType.equals("1")) {
         sql = "INSERT INTO accounts(AcctID, FName, LName, Email, Phone, "
