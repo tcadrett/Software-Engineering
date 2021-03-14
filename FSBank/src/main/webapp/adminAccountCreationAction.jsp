@@ -36,7 +36,7 @@
           out.print("<p>" + defaultUsername + "</p>");
           out.print("<p>" + defaultPWD + "</p>");
          */
-   /*
+ /*
           // Variables for creating usernames when defaultUsername is taken.
           String backupUsername = defaultUsername;
           int backupCount = 1;
@@ -45,8 +45,6 @@
             QueryResult = dbconnect.queryDB("Select Username FROM accounts WHERE Username = ?;", backupUsername);
           }
          */
-   
-   
         String result = "";
         String sql = "";
         // Create New Account
@@ -84,14 +82,22 @@
             out.print("<p>Last Name: " + LName + "</p>");
             out.print("<p>Email: " + Email + "</p>");
             out.print("<p>Password: " + defaultPWD + "</p>");
+            switch (AccountType.charAt(0)) {
+              case '2':
+                out.print("<p>Account Type: Clerk</p>");
+                break;
+              case '3':
+                out.print("<p<Account Type: Administrator</p>");
+                break;
+            }
           }
         }
 
       %>
       <div class="w3-margin"></div>
       <p><a href="adminViewRequest.jsp">Return to Requests</a></p>
-        
-</div>
+
     </div>
-  </body>
+  </div>
+</body>
 </html>
