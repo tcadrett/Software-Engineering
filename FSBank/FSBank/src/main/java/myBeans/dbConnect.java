@@ -242,6 +242,12 @@ public class dbConnect {
     }
   }
 
+  // Validate login credentials
+  public String[] loginCred() {
+    String[] result = {""};
+    return result;
+  }
+
   //Method to verify password. Avoids SQL injection
   public String[] isPwdValid(String sql, String user, String pwd) {
     String message = openDB();
@@ -277,7 +283,8 @@ public class dbConnect {
       return result;
     }
   }
-
+  
+  
   /**
    *
    * @param input input values
