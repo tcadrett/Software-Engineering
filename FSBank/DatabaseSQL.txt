@@ -1,0 +1,59 @@
+/* Sprint 1: Account Requests and Creation */
+
+CREATE DATABASE FSBank;
+
+USE FSBank;
+
+CREATE TABLE Accounts {
+	AcctID int,
+	FName varchar(30),
+	lname varchar(30),
+	email varchar(50),
+	phone varchar(11),
+	accountType int,
+
+	username varchar(30),
+	pwd varchar(30),
+	
+	PRIMARY KEY AcctID
+};
+
+
+
+CREATE TABLE AccountReq {
+	ReqID int,
+	FName varchar(30),
+	lname varchar(30),
+	email varchar(50),
+	phone varchar(11),
+	accountType int,
+
+	PRIMARY KEY ReqID
+};
+
+
+INSERT INTO Accounts (username, pwd, accountType) VALUES ("admin","admin",2);
+
+
+
+/* Sprint 2 - Adding ledger functionality 8*/
+
+CREATE TABLE Ledgers {
+	LedgerID int,
+	LedgerType int,
+	Balance double,
+	InterestRate double,
+	InterestPeriod time, /*Every x days, we apply interest*/
+
+	PRIMARY KEY LedgerID
+};
+
+CREATE TABLE AcctLedgers{
+	AcctLedger int,
+	AcctID int,
+	LedgerID int,
+
+	PRIMARY KEY AcctLedger,
+	FOREIGN KEY AcctID REFERENCES Accounts(AcctID);
+	FOREIGN KEY LedgerID REFERENCES Ledgers(LedgerID);
+};
