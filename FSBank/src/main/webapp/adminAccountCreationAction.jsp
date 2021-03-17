@@ -58,19 +58,9 @@
             out.print("<p>Last Name: " + LName + "</p>");
             out.print("<p>Email: " + Email + "</p>");
             out.print("<p>Phone: " + Phone + "</p>");
-            out.print("<p>Username: " + "</p>");
+            out.print("<p>Username: " + defaultUsername + "</p>");
             out.print("<p>Password: " + defaultPWD + "</p>");
-
-            switch (AccountType.charAt(0)) {
-              case '0':
-                out.print("<p>Account Type: Suspended</p>");
-                break;
-              case '1':
-                out.print("<p<Account Type: Account Holder</p>");
-                break;
-            }
-            out.print("<p>" + defaultUsername + "</p>");
-            out.print("<p>" + defaultPWD + "</p>");
+            out.print("<p>Account Type: " + dbconnect.decodeAccountType(AccountType) + "</p>");
           }
         } else if (AccountType.equals("2") || AccountType.equals("3")) {
 
@@ -82,14 +72,7 @@
             out.print("<p>Last Name: " + LName + "</p>");
             out.print("<p>Email: " + Email + "</p>");
             out.print("<p>Password: " + defaultPWD + "</p>");
-            switch (AccountType.charAt(0)) {
-              case '2':
-                out.print("<p>Account Type: Clerk</p>");
-                break;
-              case '3':
-                out.print("<p<Account Type: Administrator</p>");
-                break;
-            }
+            out.print("<p>Account Type: " + dbconnect.decodeAccountType(AccountType) + "</p>");
           }
         }
 

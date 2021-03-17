@@ -72,6 +72,21 @@ public class dbConnect {
     out = out.replace(" ", "");
     return out;
   }
+  
+  public String decodeAccountType(String i){
+    switch (i){
+      case "0":
+        return "Account Suspended";
+      case "1":
+        return "Account Holder";
+      case "2":
+        return "Clerk";
+      case "3":
+        return "Administrator";
+      default:
+        return "ERROR: Improper account type code.";
+    }
+  }
 
   public String htmlDropdownQuery() {
     return "";
