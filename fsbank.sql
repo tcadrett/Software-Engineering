@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 14, 2021 at 11:21 PM
+-- Generation Time: Mar 17, 2021 at 02:10 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -71,7 +71,9 @@ CREATE TABLE `accounts` (
 INSERT INTO `accounts` (`AcctID`, `FName`, `LName`, `Email`, `Phone`, `accountType`, `Username`, `Password`) VALUES
 (1, 'Admin', 'Administrator', '', '', 3, 'admin', 'admin'),
 (3, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1, 'JJoe', 'jJ7779995555!'),
-(4, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1, 'JJoe', 'jJ7779995555!');
+(4, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1, 'JJoe', 'jJ7779995555!'),
+(6, 'Alice', 'Jackson', 'aJackson@yahoo.com', '8946557736', 0, 'AJackson', 'aJ8946557736!'),
+(7, 'Alice', 'Jackson', 'aJackson@yahoo.com', '8946557736', 1, 'AJackson', 'aJ8946557736!');
 
 -- --------------------------------------------------------
 
@@ -108,7 +110,14 @@ CREATE TABLE `clerk` (
 
 INSERT INTO `clerk` (`ClerkID`, `FName`, `LName`, `Email`, `Gender`, `HireDate`, `Password`) VALUES
 (1, 'Test1', 'Test2', '0', '', '0000-00-00', 'Test4'),
-(2, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!');
+(2, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
+(3, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
+(4, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
+(5, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
+(6, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
+(7, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
+(8, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
+(9, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-15', 'aJ8946557736!');
 
 -- --------------------------------------------------------
 
@@ -218,7 +227,7 @@ ALTER TABLE `accountreq`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `AcctID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `AcctID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `checking`
@@ -230,7 +239,7 @@ ALTER TABLE `checking`
 -- AUTO_INCREMENT for table `clerk`
 --
 ALTER TABLE `clerk`
-  MODIFY `ClerkID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ClerkID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `credit card`

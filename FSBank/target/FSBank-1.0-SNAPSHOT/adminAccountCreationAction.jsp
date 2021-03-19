@@ -49,37 +49,18 @@
         String sql = "";
         // Create New Account
         if (AccountType.equals("0") || AccountType.equals("1")) {
-          QueryResult = dbconnect.queryDB("Select Username FROM accounts WHERE Username = ?;", backupUsername);
-        }
-       */
-      String result = "";
-      String sql = "";
-      // Create New Account
-
-      if (AccountType.equals("0") || AccountType.equals("1")) {
-        sql = "INSERT INTO accounts(AcctID, FName, LName, Email, Phone, "
-                + "accountType, Username, Password) VALUES (0,?,?,?,?,?,?,?);";
-        result = dbconnect.updateDB(sql, FName, LName, Email, Phone, AccountType, defaultUsername, defaultPWD);
-        if (result.equals("CLOSED")) {
-          out.print("<h2>Account for " + FName + " " + LName + " has been created.</h2>");
-          out.print("<p>First Name: " + FName + "</p>");
-          out.print("<p>Last Name: " + LName + "</p>");
-          out.print("<p>Email: " + Email + "</p>");
-          out.print("<p>Phone: " + Phone + "</p>");
-          out.print("<p>Username: " + "</p>");
-          out.print("<p>Password: " + defaultPWD + "</p>");
-
-
-            switch (AccountType.charAt(0)) {
-              case '0':
-                out.print("<p>Account Type: Suspended</p>");
-                break;
-              case '1':
-                out.print("<p<Account Type: Account Holder</p>");
-                break;
-            }
-            out.print("<p>" + defaultUsername + "</p>");
-            out.print("<p>" + defaultPWD + "</p>");
+          sql = "INSERT INTO accounts(AcctID, FName, LName, Email, Phone, "
+                  + "accountType, Username, Password) VALUES (0,?,?,?,?,?,?,?);";
+          result = dbconnect.updateDB(sql, FName, LName, Email, Phone, AccountType, defaultUsername, defaultPWD);
+          if (result.equals("CLOSED")) {
+            out.print("<h2>Account for " + FName + " " + LName + " has been created.</h2>");
+            out.print("<p>First Name: " + FName + "</p>");
+            out.print("<p>Last Name: " + LName + "</p>");
+            out.print("<p>Email: " + Email + "</p>");
+            out.print("<p>Phone: " + Phone + "</p>");
+            out.print("<p>Username: " + defaultUsername + "</p>");
+            out.print("<p>Password: " + defaultPWD + "</p>");
+            out.print("<p>Account Type: " + dbconnect.decodeAccountType(AccountType) + "</p>");
           }
         } else if (AccountType.equals("2") || AccountType.equals("3")) {
 
@@ -91,14 +72,7 @@
             out.print("<p>Last Name: " + LName + "</p>");
             out.print("<p>Email: " + Email + "</p>");
             out.print("<p>Password: " + defaultPWD + "</p>");
-            switch (AccountType.charAt(0)) {
-              case '2':
-                out.print("<p>Account Type: Clerk</p>");
-                break;
-              case '3':
-                out.print("<p<Account Type: Administrator</p>");
-                break;
-            }
+            out.print("<p>Account Type: " + dbconnect.decodeAccountType(AccountType) + "</p>");
           }
         }
 
