@@ -72,21 +72,6 @@ public class dbConnect {
     out = out.replace(" ", "");
     return out;
   }
-  
-  public String decodeAccountType(String i){
-    switch (i){
-      case "0":
-        return "Account Suspended";
-      case "1":
-        return "Account Holder";
-      case "2":
-        return "Clerk";
-      case "3":
-        return "Administrator";
-      default:
-        return "ERROR: Improper account type code.";
-    }
-  }
 
   public String htmlDropdownQuery() {
     return "";
@@ -257,6 +242,12 @@ public class dbConnect {
     }
   }
 
+  // Validate login credentials
+  public String[] loginCred() {
+    String[] result = {""};
+    return result;
+  }
+
   //Method to verify password. Avoids SQL injection
   public String[] isPwdValid(String sql, String user, String pwd) {
     String message = openDB();
@@ -292,7 +283,8 @@ public class dbConnect {
       return result;
     }
   }
-
+  
+  
   /**
    *
    * @param input input values
