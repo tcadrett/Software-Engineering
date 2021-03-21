@@ -41,7 +41,7 @@
     <div class="w3-dropdown-hover w3-hide-small">
     <button class="w3-button" title="Notifications">Sign UP <i class="fa fa-caret-down"></i></button>     
     <div class="w3-dropdown-content w3-card-4 w3-bar-block">
-      <a href="customer.jsp" class="w3-bar-item w3-button">NEW ACCOUNT</a>
+      <a href="accountRequest.jsp" class="w3-bar-item w3-button">Apply for Account!</a>
     </div>
   </div>
   <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-hover-teal" title="Search"><i class="fa fa-search"></i></a>
