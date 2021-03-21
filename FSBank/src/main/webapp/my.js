@@ -7,16 +7,18 @@
 function validatepassword() {
   var pwd = document.register.password.value;
   var pwd2 = document.register.password2.value;
-  if (pwd != pwd2) {
+
+  if (!pwd.equals(pwd2)) {
     document.getElementById("password2").setCustomValidity("Passwords do not match");
   } else {
     document.getElementById("password2").setCustomValidity("");
   }
 }
+
 function validate() {
   var pwd = document.register.password.value;
-  if((pwd.length >= 8) && (pwd.search(/(@|#|$)/) >= 0))
-    document.password.submit();
+  if((pwd.length >= 8) && (pwd.search(/(@|#|$)/) >= 0)){
+    document.password.submit();}
   else if(pwd.search(/[a-z]/) < 0){
       alert("Your password needs a lower case letter")
   }
@@ -28,7 +30,8 @@ function validate() {
   }
   else {
     alert
+
     document.getElementById("password").innerHTML = "Your password is missing special chars and atleast 8 letters ";
     return;
   }
-} 
+}

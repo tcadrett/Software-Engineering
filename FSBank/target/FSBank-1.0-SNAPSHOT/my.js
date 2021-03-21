@@ -7,7 +7,8 @@
 function validatepassword() {
   var pwd = document.register.password.value;
   var pwd2 = document.register.password2.value;
-  if (pwd != pwd2) {
+
+  if (!pwd.equals(pwd2)) {
     document.getElementById("password2").setCustomValidity("Passwords do not match");
   } else {
     document.getElementById("password2").setCustomValidity("");
@@ -28,6 +29,7 @@ function validate() {
   }
   else {
     alert
+
     document.getElementById("password").innerHTML = "Your password is missing special chars and atleast 8 letters ";
     return;
   }

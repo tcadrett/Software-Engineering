@@ -247,7 +247,14 @@ public class dbConnect {
     String[] result = {""};
     return result;
   }
-
+  
+  /**
+   * 
+   * @param sql
+   * @param user
+   * @param pwd
+   * @return 
+   */
   //Method to verify password. Avoids SQL injection
   public String[] isPwdValid(String sql, String user, String pwd) {
     String message = openDB();
