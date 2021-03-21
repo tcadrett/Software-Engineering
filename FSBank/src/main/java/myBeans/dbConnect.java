@@ -248,6 +248,43 @@ public class dbConnect {
     return result;
   }
 
+  //Method to verify password. Avoids SQL injection
+  public String[] isPwdValid(String sql, String user, String pwd) {
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        pstm = conn.prepareStatement(sql);
+        pstm.setString(1, user);
+        pstm.setString(2, pwd);
+        rst = pstm.executeQuery();
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        String[] result = new String[count];
+        int records = 0;
+        while (rst.next()) {
+          records++;
+          for (int i = 0; i < count; i++) {
+            result[i] = rst.getString(i + 1);
+          }
+        }
+        closeDB();
+        if (records == 0) {
+          result[0] = "Error: Invalid Credentials";
+        }
+      return result;
+      } catch (Exception e) {
+        String[] result = new String[1];
+        result[0] = "Error: " + e.getMessage();
+        return result;
+      }
+    } else {
+      String[] result = new String[1];
+      result[0] = "Error: " + message;
+      return result;
+    }
+  }
+  
+  
   /**
    *
    * @param input input values
