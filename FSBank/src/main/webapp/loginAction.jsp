@@ -17,6 +17,7 @@
       String id = request.getParameter("id");
       String password = request.getParameter("password");
       String sql = "select firstname, lastname, usertype from staff where id = ? and password = ?";
+
       String[] result = dbconnect.isPwdValid(sql, id, password);
       
       if (result[0].length() >= 6 && result[0].substring(0, 6).equals("Error:")) {

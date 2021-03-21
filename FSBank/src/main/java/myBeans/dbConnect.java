@@ -247,7 +247,6 @@ public class dbConnect {
     String[] result = {""};
     return result;
   }
-
   
   /**
    * 
