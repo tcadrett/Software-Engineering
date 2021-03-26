@@ -73,6 +73,45 @@ public class dbConnect {
     return out;
   }
 
+  /**
+   * 
+   * @param status account status
+   * @return string label of account status
+   */
+  public String decodeAccountStatus(String status){
+    switch (status){
+      case "0":
+        return "Pending Request";
+      case "1":
+        return "Active";
+      case "2":
+        return "Closed";
+      default:
+        return "ERROR: Invalid Account Status";
+    }
+  }
+  
+  /**
+   * 
+   * @param type account type
+   * @return string label of account type
+   */
+    public String decodeAccountType(String type){
+    switch (type){
+      case "0":
+        return "Suspended";
+      case "1":
+        return "Account Holder";
+      case "2":
+        return "Clerk";
+      case "3":
+        return "Administrator";
+      default:
+        return "ERROR: Invalid Account Type";
+    }
+  }
+  
+  
   public String htmlDropdownQuery() {
     return "";
   }
@@ -356,11 +395,11 @@ public class dbConnect {
     }
   }
 
-  /**
-   *
-   * @param sql SQL statement
-   * @return String
-   */
+ /**
+  * 
+  * @param input
+  * @return 
+  */
   // Modify the database with an SQL statement
   public String updateDB(String... input) {
     String out = openDB();  // connect to database
