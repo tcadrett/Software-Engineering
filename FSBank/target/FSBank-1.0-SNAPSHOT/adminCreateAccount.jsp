@@ -109,10 +109,10 @@
                 value="3">Administrator</option>
             </select>
 
-            </select>
 
 
             <hr>
+            <input type='hidden' name='acctID' value='<%out.print(id);%>'>
             <input type='submit' value='Submit' name='Submit' />
             <div class='w3-margin'></div>
           </form>

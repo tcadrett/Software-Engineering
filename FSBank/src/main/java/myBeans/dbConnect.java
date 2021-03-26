@@ -36,6 +36,7 @@ public class dbConnect {
     try {
       stm.close(); // close statement
       conn.close(); // close connection
+      System.out.println("Closed DB");
     } catch (Exception e) {
       out = e.getMessage();
     }
