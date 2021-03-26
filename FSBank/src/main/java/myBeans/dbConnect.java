@@ -185,7 +185,7 @@ public class dbConnect {
     String output = openDB();
     if (output.equals("OPEN")) {
       try {
-        String sql = "SELECT FName, LName, Email, Phone, accountType, ReqID FROM accountreq;";
+        String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctID FROM accounts WHERE AcctStatus = 0;";
         rst = stm.executeQuery(sql);  // execute sql query - results in rst
         rsmd = rst.getMetaData();           // } Get column count
         int noCol = rsmd.getColumnCount();  // |
