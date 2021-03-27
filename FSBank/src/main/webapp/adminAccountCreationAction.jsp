@@ -13,9 +13,11 @@
     <%@include file="header.jsp" %>
   </head>
   <body>
-    <div class="w3-container">
-      <h1>AccountCreationAction</h1>
-
+    <div class="w3-container w3-padding-32">
+      <div class="w3-section">
+        <h1>AccountCreationAction</h1>
+      </div>
+      <div class="w3-section">
       <%
         dbConnect dbconnect = new dbConnect();
         String FName = request.getParameter("FirstName");
@@ -26,8 +28,7 @@
         String defaultUsername = FName.substring(0, 1) + LName;
         String defaultPWD = FName.substring(0, 1).toLowerCase() + LName.substring(0, 1) + Phone + "!";
         String AcctID = request.getParameter("acctID");
-        
-        
+
         /*
           // Variables for creating usernames when defaultUsername is taken.
           String backupUsername = defaultUsername;
@@ -39,11 +40,10 @@
          */
         String result = "";
         String sql = "";
-        
+
         // Update account listing with new status
         //sql = "UPDATE accounts(FName, LName, Email, Phone, AcctType, Username, Pwd, AcctStatus) WHERE AcctID = ? VALUES (0,?,?,?,?,?,?,?,1);";
-        
-        sql="UPDATE accounts "
+        sql = "UPDATE accounts "
                 + "SET FName = ?, LName = ?, Email = ?, Phone = ?, AcctType = ?, Username = ?, Pwd = ?, AcctStatus = 1 "
                 + "WHERE AcctID = ?;";
         result = dbconnect.updateDB(sql, FName, LName, Email, Phone, AccountType, defaultUsername, defaultPWD, AcctID);
@@ -55,11 +55,11 @@
           out.print("<p>Phone: " + Phone + "</p>");
           out.print("<p>Username: " + "</p>");
           out.print("<p>Password: " + defaultPWD + "</p>");
-        }
-        else {
+        } else {
           out.print(result);
         }
       %>
+      </div>
       <div class="w3-margin"></div>
       <p><a href="adminViewRequest.jsp">Return to Requests</a></p>
 

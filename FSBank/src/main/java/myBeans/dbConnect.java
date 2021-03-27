@@ -75,12 +75,12 @@ public class dbConnect {
   }
 
   /**
-   * 
+   *
    * @param status account status
    * @return string label of account status
    */
-  public String decodeAccountStatus(String status){
-    switch (status){
+  public String decodeAccountStatus(String status) {
+    switch (status) {
       case "0":
         return "Pending Request";
       case "1":
@@ -91,14 +91,14 @@ public class dbConnect {
         return "ERROR: Invalid Account Status";
     }
   }
-  
+
   /**
-   * 
+   *
    * @param type account type
    * @return string label of account type
    */
-    public String decodeAccountType(String type){
-    switch (type){
+  public String decodeAccountType(String type) {
+    switch (type) {
       case "0":
         return "Suspended";
       case "1":
@@ -111,10 +111,42 @@ public class dbConnect {
         return "ERROR: Invalid Account Type";
     }
   }
-  
-  
-  public String htmlDropdownQuery() {
-    return "";
+
+  /**
+   *
+   * @param sql first column inserted as Value, subsequent columns as text
+   * separated by delimiter
+   * @param delim Delimiter between subsequent columns
+   * @param style Style classes to be applied to option tag
+   * @return String html string
+   */
+  public String htmlDropdownQuery(String sql, String delim, String style) {
+    String html = "";
+    String output = openDB(); // open connection to database
+    if (output.equals("OPEN")) {
+      try {
+        rst = stm.executeQuery(sql);  // execute sql query - results in rst
+        rsmd = rst.getMetaData();           // } Get column count
+        int noCol = rsmd.getColumnCount();  // |
+        
+        while(rst.next()){
+          html += "<option value = '" + rst.getShort(1) + "' class='" + style + "'>";
+          for(int i = 2; i < noCol; i++){
+            html += rst.getString(i) + delim;
+          }
+          html+= rst.getString(noCol);
+          html += "</option>\n";
+        }
+        output = closeDB();
+        return html;
+
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return output;
+    }
+
   }
 
   /**
@@ -140,7 +172,7 @@ public class dbConnect {
           }
           html += "</li>\n";
         }
-
+        output = closeDB();
         return html;
       } catch (Exception e) {
         return e.getMessage();
@@ -204,7 +236,7 @@ public class dbConnect {
             }
             break;
         }
-
+        output = closeDB();
         return html;
       } catch (Exception e) {
         return e.getMessage();
@@ -218,9 +250,10 @@ public class dbConnect {
    *
    * @param trStyle row style
    * @param tdStyle cell style
+   * @param buttonStyle button style
    * @return headless html table of account requests
    */
-  public String viewAccountRequests(String trStyle, String tdStyle) {
+  public String viewAccountRequests(String trStyle, String tdStyle, String buttonStyle) {
     String html = "";
     String output = openDB();
     if (output.equals("OPEN")) {
@@ -263,15 +296,16 @@ public class dbConnect {
           }
           // Add Action Buttons - Button name is "A-RequestID" or "D-RequestID"
           html += "<td " + tdStyle + ">";
-          html += "<input type='submit' value='Accept' name='A" + rst.getString(noCol) + "'/>";
+          html += "<input type='submit' value='Accept' class='" + buttonStyle + "', name='A" + rst.getString(noCol) + "'/>";
           html += "</td>";
 
           html += "<td " + tdStyle + ">";
-          html += "<input type='submit' value='Reject' name='R" + rst.getString(noCol) + "'/>";
+          html += "<input type='submit' value='Reject' class='" + buttonStyle + "',name='R" + rst.getString(noCol) + "'/>";
           html += "</td>";
 
           html += "</tr>";
         }
+        output = closeDB();
         return html;
 
       } catch (Exception e) {
@@ -287,13 +321,13 @@ public class dbConnect {
     String[] result = {""};
     return result;
   }
-  
+
   /**
-   * 
+   *
    * @param sql
    * @param user
    * @param pwd
-   * @return 
+   * @return
    */
   //Method to verify password. Avoids SQL injection
   public String[] isPwdValid(String sql, String user, String pwd) {
@@ -318,7 +352,7 @@ public class dbConnect {
         if (records == 0) {
           result[0] = "Error: Invalid Credentials";
         }
-      return result;
+        return result;
       } catch (Exception e) {
         String[] result = new String[1];
         result[0] = "Error: " + e.getMessage();
@@ -330,8 +364,7 @@ public class dbConnect {
       return result;
     }
   }
-  
-  
+
   /**
    *
    * @param input input values
@@ -352,7 +385,7 @@ public class dbConnect {
         System.out.println(pstm);
 
         for (int i = 1; i < noArgs; i++) {
-          pstm.setString(i, input[i]);     
+          pstm.setString(i, input[i]);
         }
         System.out.println(pstm);
 
@@ -396,11 +429,11 @@ public class dbConnect {
     }
   }
 
- /**
-  * 
-  * @param input
-  * @return 
-  */
+  /**
+   *
+   * @param input
+   * @return
+   */
   // Modify the database with an SQL statement
   public String updateDB(String... input) {
     String out = openDB();  // connect to database
@@ -415,13 +448,13 @@ public class dbConnect {
         System.out.println(pstm);
 
         for (int i = 1; i < noArgs; i++) {
-          pstm.setString(i, input[i]);      
+          pstm.setString(i, input[i]);
         }
         System.out.println(pstm);
 
         pstm.executeUpdate(); // Execute query
         out = closeDB();
-        
+
       } catch (Exception e) {
         out = e.getMessage(); // get error message if sql fails
       }

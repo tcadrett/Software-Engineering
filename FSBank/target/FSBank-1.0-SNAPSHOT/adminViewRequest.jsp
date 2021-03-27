@@ -32,56 +32,46 @@
       //session.getAttribute("logged").equals("Admin")
     %>
 
+    <div class="w3-container w3-padding-32">
 
-    <div class="w3-container">
-      <h1>View Account Requests</h1>
+      <div class="w3-section">
+        <h1>View Account Requests</h1>
+      </div>
+      <!--
+        Display table with option rows at end.
+      -->
+      <div class="w3-section w3-responsive ">
+
+        <form action="adminCreateAccount.jsp">
+          <table class="w3-table w3-striped w3-hoverable">
+            <tr class="w3-teal">
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Account Type</th>
+              <th  colspan="2">Action</th>
+            </tr>
+            <%
+              out.print(dbconnect.viewAccountRequests("", "", "w3-button w3-hover-grey w3-teal"));
+
+            %>
+
+          </table>
+
+        </form>
+
+
+      </div>
+
+      <div class="w3-container">
+        <a href="adminDashboard.jsp" class="w3-button w3-teal">Return to Dashboard</a>
+      </div>
+
+
+
+
     </div>
-    <!--
-      Display table with option rows at end.
-    -->
-    <div class="w3-container w3-half">
-
-      <form action="adminCreateAccount.jsp">
-        <table class="w3-table w3-striped ">
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Account Type</th>
-            <th>Action</th>
-          </tr>
-          <%
-            out.print(dbconnect.viewAccountRequests("", "'"));
-
-          %>
-
-        </table>
-
-      </form>
-
-
-    </div>
-
-    <div class="w3-container">
-      <p><a href="adminDashboard.jsp">Return to Dashboard</a></p>
-    </div>
-
-
-
-    <!--
-    <div class="w3-container w3-half">
-      <table class="w3-table w3-striped">
-    <%      String sql = "SELECT * FROM `accountreq`;";
-      //out.print(dbconnect.htmlTableQuery(sql, "Head", "", "", "", "", "<th>Accept</th>", "<th>Reject</th>"));
-      out.print(dbconnect.htmlTableQuery(sql, "Head", "", "", "", "", "<th>Action</th>", "<td>Accept/Reject</td>"));
-    %>
-  </table>
-</div>
-    -->
-
-
-
 
 
   </body>
