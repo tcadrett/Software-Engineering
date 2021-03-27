@@ -61,7 +61,7 @@
       %>
       </div>
       <div class="w3-margin"></div>
-      <p><a href="adminViewRequest.jsp">Return to Requests</a></p>
+      <div class="w3-section"><a href="adminViewRequest.jsp" class="w3-button w3-teal">Return to Requests</a></div>
 
     </div>
   </div>
