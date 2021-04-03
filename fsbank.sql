@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2021 at 02:10 AM
+-- Generation Time: Mar 22, 2021 at 06:03 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -24,56 +24,21 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `accountreq`
---
-
-CREATE TABLE `accountreq` (
-  `ReqID` int(7) NOT NULL,
-  `FName` varchar(30) NOT NULL,
-  `LName` varchar(30) NOT NULL,
-  `Email` varchar(50) NOT NULL,
-  `Phone` varchar(11) NOT NULL,
-  `accountType` int(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `accountreq`
---
-
-INSERT INTO `accountreq` (`ReqID`, `FName`, `LName`, `Email`, `Phone`, `accountType`) VALUES
-(4, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1),
-(320, 'Jason', 'Dean', 'jDean', '', 0),
-(321, 'Jack', 'Johnson', 'jJohnson@hotmail.com', '4449997359', 0),
-(322, 'Alice', 'Jackson', 'aJackson@yahoo.com', '8946557736', 2),
-(323, 'Admin', 'Administrator', 'admin@FSBank.com', '8006447116', 3);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `accounts`
 --
 
 CREATE TABLE `accounts` (
-  `AcctID` int(7) NOT NULL,
-  `FName` varchar(30) NOT NULL,
-  `LName` varchar(30) NOT NULL,
-  `Email` varchar(50) NOT NULL,
-  `Phone` varchar(11) NOT NULL,
-  `accountType` int(7) NOT NULL,
+  `AcctID` int(11) NOT NULL,
+  `FName` varchar(30) NOT NULL DEFAULT '""',
+  `LName` varchar(30) NOT NULL DEFAULT '""',
+  `Email` varchar(50) NOT NULL DEFAULT '""',
+  `Phone` varchar(11) NOT NULL DEFAULT '""',
+  `AcctType` smallint(6) NOT NULL DEFAULT 0,
+  `AcctStatus` smallint(6) NOT NULL DEFAULT 0,
   `Username` varchar(30) NOT NULL,
-  `Password` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `accounts`
---
-
-INSERT INTO `accounts` (`AcctID`, `FName`, `LName`, `Email`, `Phone`, `accountType`, `Username`, `Password`) VALUES
-(1, 'Admin', 'Administrator', '', '', 3, 'admin', 'admin'),
-(3, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1, 'JJoe', 'jJ7779995555!'),
-(4, 'Jack', 'Joe', 'jJoe@gmail.com', '7779995555', 1, 'JJoe', 'jJ7779995555!'),
-(6, 'Alice', 'Jackson', 'aJackson@yahoo.com', '8946557736', 0, 'AJackson', 'aJ8946557736!'),
-(7, 'Alice', 'Jackson', 'aJackson@yahoo.com', '8946557736', 1, 'AJackson', 'aJ8946557736!');
+  `Pwd` varchar(30) NOT NULL,
+  `CreationDate` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -82,96 +47,58 @@ INSERT INTO `accounts` (`AcctID`, `FName`, `LName`, `Email`, `Phone`, `accountTy
 --
 
 CREATE TABLE `checking` (
-  `CheckingID` int(7) NOT NULL,
-  `CurrentBalance` int(7) NOT NULL,
-  `CheckingAccountNumber` int(12) NOT NULL,
-  `AcctID` int(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `CheckingID` int(11) NOT NULL,
+  `AcctID` int(11) NOT NULL,
+  `Balance` float NOT NULL DEFAULT 0,
+  `Interest` float NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clerk`
+-- Table structure for table `credit`
 --
 
-CREATE TABLE `clerk` (
-  `ClerkID` int(7) NOT NULL,
-  `FName` varchar(30) NOT NULL,
-  `LName` varchar(30) NOT NULL,
-  `Email` varchar(50) DEFAULT NULL,
-  `Gender` varchar(10) NOT NULL DEFAULT 'N/A',
-  `HireDate` date NOT NULL DEFAULT current_timestamp(),
-  `Password` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `clerk`
---
-
-INSERT INTO `clerk` (`ClerkID`, `FName`, `LName`, `Email`, `Gender`, `HireDate`, `Password`) VALUES
-(1, 'Test1', 'Test2', '0', '', '0000-00-00', 'Test4'),
-(2, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
-(3, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
-(4, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
-(5, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
-(6, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
-(7, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
-(8, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-14', 'aJ8946557736!'),
-(9, 'Alice', 'Jackson', 'aJackson@yahoo.com', 'N/A', '2021-03-15', 'aJ8946557736!');
+CREATE TABLE `credit` (
+  `CreditID` int(11) NOT NULL,
+  `AcctID` int(11) NOT NULL,
+  `CreditLimit` double NOT NULL,
+  `Balance` double NOT NULL,
+  `CardNumber` varchar(17) NOT NULL,
+  `DueDate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `credit card`
+-- Table structure for table `loans`
 --
 
-CREATE TABLE `credit card` (
-  `AcctID` int(7) NOT NULL,
-  `APR` decimal(2,1) NOT NULL,
-  `CreditLimit` decimal(7,2) NOT NULL,
-  `PayOffAmount` decimal(7,2) NOT NULL,
-  `CreditCardNumber` int(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `loans` (
+  `LoanID` int(11) NOT NULL,
+  `AcctID` int(11) NOT NULL,
+  `Principal` double NOT NULL,
+  `Balance` double NOT NULL,
+  `APR` double NOT NULL,
+  `DueDate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `loan`
+-- Table structure for table `savings`
 --
 
-CREATE TABLE `loan` (
-  `LoanID` int(7) NOT NULL,
-  `PrincipleBalance` decimal(5,2) NOT NULL,
-  `APR` decimal(2,1) NOT NULL,
-  `SchedulePayment` text NOT NULL,
-  `CurrentPayoff` decimal(5,2) NOT NULL,
-  `PaymentDueDate` date NOT NULL,
-  `AcctID` int(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `saving`
---
-
-CREATE TABLE `saving` (
-  `SavingID` int(7) NOT NULL,
-  `CurrentBalance` int(12) NOT NULL,
-  `SavingAccountNumber` int(12) NOT NULL,
-  `AcctID` int(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `savings` (
+  `SavingsID` int(11) NOT NULL,
+  `AcctID` int(11) NOT NULL,
+  `Balance` double NOT NULL DEFAULT 0,
+  `Interest` double NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `accountreq`
---
-ALTER TABLE `accountreq`
-  ADD PRIMARY KEY (`ReqID`),
-  ADD KEY `accountType` (`accountType`);
 
 --
 -- Indexes for table `accounts`
@@ -187,77 +114,59 @@ ALTER TABLE `checking`
   ADD KEY `AcctID` (`AcctID`);
 
 --
--- Indexes for table `clerk`
+-- Indexes for table `credit`
 --
-ALTER TABLE `clerk`
-  ADD PRIMARY KEY (`ClerkID`);
+ALTER TABLE `credit`
+  ADD PRIMARY KEY (`CreditID`),
+  ADD KEY `AcctID` (`AcctID`);
 
 --
--- Indexes for table `credit card`
+-- Indexes for table `loans`
 --
-ALTER TABLE `credit card`
-  ADD PRIMARY KEY (`AcctID`);
-
---
--- Indexes for table `loan`
---
-ALTER TABLE `loan`
+ALTER TABLE `loans`
   ADD PRIMARY KEY (`LoanID`),
   ADD KEY `AcctID` (`AcctID`);
 
 --
--- Indexes for table `saving`
+-- Indexes for table `savings`
 --
-ALTER TABLE `saving`
-  ADD PRIMARY KEY (`SavingID`),
-  ADD UNIQUE KEY `AcctID` (`AcctID`),
-  ADD KEY `AcctID_2` (`AcctID`);
+ALTER TABLE `savings`
+  ADD PRIMARY KEY (`SavingsID`),
+  ADD KEY `AcctID` (`AcctID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `accountreq`
---
-ALTER TABLE `accountreq`
-  MODIFY `ReqID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=324;
-
---
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `AcctID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `AcctID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `checking`
 --
 ALTER TABLE `checking`
-  MODIFY `CheckingID` int(7) NOT NULL AUTO_INCREMENT;
+  MODIFY `CheckingID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `clerk`
+-- AUTO_INCREMENT for table `credit`
 --
-ALTER TABLE `clerk`
-  MODIFY `ClerkID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+ALTER TABLE `credit`
+  MODIFY `CreditID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `credit card`
+-- AUTO_INCREMENT for table `loans`
 --
-ALTER TABLE `credit card`
-  MODIFY `AcctID` int(7) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `loans`
+  MODIFY `LoanID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `loan`
+-- AUTO_INCREMENT for table `savings`
 --
-ALTER TABLE `loan`
-  MODIFY `LoanID` int(7) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `saving`
---
-ALTER TABLE `saving`
-  MODIFY `SavingID` int(7) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `savings`
+  MODIFY `SavingsID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -267,25 +176,25 @@ ALTER TABLE `saving`
 -- Constraints for table `checking`
 --
 ALTER TABLE `checking`
-  ADD CONSTRAINT `checking_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`);
+  ADD CONSTRAINT `checking_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `credit card`
+-- Constraints for table `credit`
 --
-ALTER TABLE `credit card`
-  ADD CONSTRAINT `credit card_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`);
+ALTER TABLE `credit`
+  ADD CONSTRAINT `credit_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `loan`
+-- Constraints for table `loans`
 --
-ALTER TABLE `loan`
-  ADD CONSTRAINT `loan_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`);
+ALTER TABLE `loans`
+  ADD CONSTRAINT `loans_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `saving`
+-- Constraints for table `savings`
 --
-ALTER TABLE `saving`
-  ADD CONSTRAINT `saving_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`);
+ALTER TABLE `savings`
+  ADD CONSTRAINT `savings_ibfk_1` FOREIGN KEY (`AcctID`) REFERENCES `accounts` (`AcctID`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

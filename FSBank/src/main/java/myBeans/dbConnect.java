@@ -128,13 +128,13 @@ public class dbConnect {
         rst = stm.executeQuery(sql);  // execute sql query - results in rst
         rsmd = rst.getMetaData();           // } Get column count
         int noCol = rsmd.getColumnCount();  // |
-        
-        while(rst.next()){
+
+        while (rst.next()) {
           html += "<option value = '" + rst.getShort(1) + "' class='" + style + "'>";
-          for(int i = 2; i < noCol; i++){
+          for (int i = 2; i < noCol; i++) {
             html += rst.getString(i) + delim;
           }
-          html+= rst.getString(noCol);
+          html += rst.getString(noCol);
           html += "</option>\n";
         }
         output = closeDB();
@@ -205,6 +205,19 @@ public class dbConnect {
         rsmd = rst.getMetaData();           // } Get column count
         int noCol = rsmd.getColumnCount();  // |
 
+        // Check if Account Type or Account Status columns are returned.
+        //  set isAcct and isStat to specified column
+        int isAcct = 0;
+        int isStat = 0;
+        for (int i = 1; i <= noCol; i++) {
+          if (rsmd.getColumnName(i).equals("AcctType")) {
+            isAcct = i;
+          }
+          if (rsmd.getColumnName(i).equals("AcctStatus")) {
+            isStat = i;
+          }
+        }
+
         switch (type) {
           case "Head":
             // create column headings
@@ -218,7 +231,13 @@ public class dbConnect {
             while (rst.next()) {
               html += "<tr " + rowStyle + ">";
               for (int i = 0; i < noCol; i++) {
-                html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                if (isAcct != 0 && i + 1 == isAcct) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountType(rst.getString(i + 1)) + "</td>\n";
+                } else if (isStat != 0 && i + 1 == isStat) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountStatus(rst.getString(i + 1)) + "</td>\n";
+                } else {
+                  html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                }
               }
               html += rowAddi;
               html += "</tr>\n";
@@ -229,12 +248,51 @@ public class dbConnect {
             while (rst.next()) {
               html += "<tr " + rowStyle + ">";
               for (int i = 0; i < noCol; i++) {
-                html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                if (isAcct != 0 && i + 1 == isAcct) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountType(rst.getString(i + 1)) + "</td>\n";
+                } else if (isStat != 0 && i + 1 == isStat) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountStatus(rst.getString(i + 1)) + "</td>\n";
+                } else {
+                  html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                }
               }
               html += rowAddi;
               html += "</tr>\n";
             }
             break;
+        }
+        output = closeDB();
+        return html;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return output;
+    }
+  }
+
+  public String viewAccounts(String trStyle, String tdStyle, String buttonStyle) {
+    String html = "";
+    String output = openDB();
+    if (output.equals("OPEN")) {
+      try {
+        String sql = "SELECT AcctID, FName, LName, AcctType, Username, CreationDate FROM accounts WHERE AcctStatus = 1 ORDER BY LName, FName;";
+        rst = stm.executeQuery(sql);  // execute sql query - results in rst
+        rsmd = rst.getMetaData();           // } Get column count
+        int noCol = rsmd.getColumnCount();  // |
+
+        while (rst.next()) {
+          html += "<tr class='" + trStyle + "'>";
+
+          for (int i = 1; i <= noCol; i++) {
+            html += "<td class='" + tdStyle + "'>";
+            html += rst.getString(i);
+            html += "</td>";
+            html += "<input type='submit' value='Modify' class='" + buttonStyle + "', name='" + rst.getString(1) + "'/>";
+
+          }
+
+          html += "</tr>";
         }
         output = closeDB();
         return html;
@@ -270,27 +328,10 @@ public class dbConnect {
 
             html += "<td " + tdStyle + ">";
             if (i == 4) {
-              // decode account type
               switch (rst.getString(i + 1)) {
-                case "0":
-                  html += "Suspended";
-                  break;
-                case "1":
-                  html += "Account Holder";
-                  break;
-                case "2":
-                  html += "Clerk";
-                  break;
-                case "3":
-                  html += "Administrator";
-                  break;
-                default:
-                  html += "N/A";
-                  break;
-              }
+              html += decodeAccountType(rst.getString(i + 1));
             } else {
               html += rst.getString(i + 1);
-
             }
             html += "</td>";
           }

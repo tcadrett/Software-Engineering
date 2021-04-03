@@ -19,6 +19,7 @@
       String sql = "select FName, LName, usertype from accounts where id = ? and password = ?";
 
       String[] result = dbconnect.isPwdValid(sql, id, password);
+
       if (result[0].length() >= 6 && result[0].substring(0, 6).equals("Error:")) {
         session.setAttribute("logged", "index");
         response.sendRedirect("index.jsp?error='" + result[0] + "'");
