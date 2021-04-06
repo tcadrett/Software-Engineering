@@ -36,6 +36,7 @@ public class dbConnect {
     try {
       stm.close(); // close statement
       conn.close(); // close connection
+      System.out.println("Closed DB");
     } catch (Exception e) {
       out = e.getMessage();
     }
@@ -73,8 +74,79 @@ public class dbConnect {
     return out;
   }
 
-  public String htmlDropdownQuery() {
-    return "";
+  /**
+   *
+   * @param status account status
+   * @return string label of account status
+   */
+  public String decodeAccountStatus(String status) {
+    switch (status) {
+      case "0":
+        return "Pending Request";
+      case "1":
+        return "Active";
+      case "2":
+        return "Closed";
+      default:
+        return "ERROR: Invalid Account Status";
+    }
+  }
+
+  /**
+   *
+   * @param type account type
+   * @return string label of account type
+   */
+  public String decodeAccountType(String type) {
+    switch (type) {
+      case "0":
+        return "Suspended";
+      case "1":
+        return "Account Holder";
+      case "2":
+        return "Clerk";
+      case "3":
+        return "Administrator";
+      default:
+        return "ERROR: Invalid Account Type";
+    }
+  }
+
+  /**
+   *
+   * @param sql first column inserted as Value, subsequent columns as text
+   * separated by delimiter
+   * @param delim Delimiter between subsequent columns
+   * @param style Style classes to be applied to option tag
+   * @return String html string
+   */
+  public String htmlDropdownQuery(String sql, String delim, String style) {
+    String html = "";
+    String output = openDB(); // open connection to database
+    if (output.equals("OPEN")) {
+      try {
+        rst = stm.executeQuery(sql);  // execute sql query - results in rst
+        rsmd = rst.getMetaData();           // } Get column count
+        int noCol = rsmd.getColumnCount();  // |
+
+        while (rst.next()) {
+          html += "<option value = '" + rst.getShort(1) + "' class='" + style + "'>";
+          for (int i = 2; i < noCol; i++) {
+            html += rst.getString(i) + delim;
+          }
+          html += rst.getString(noCol);
+          html += "</option>\n";
+        }
+        output = closeDB();
+        return html;
+
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return output;
+    }
+
   }
 
   /**
@@ -100,7 +172,7 @@ public class dbConnect {
           }
           html += "</li>\n";
         }
-
+        output = closeDB();
         return html;
       } catch (Exception e) {
         return e.getMessage();
@@ -133,6 +205,19 @@ public class dbConnect {
         rsmd = rst.getMetaData();           // } Get column count
         int noCol = rsmd.getColumnCount();  // |
 
+        // Check if Account Type or Account Status columns are returned.
+        //  set isAcct and isStat to specified column
+        int isAcct = 0;
+        int isStat = 0;
+        for (int i = 1; i <= noCol; i++) {
+          if (rsmd.getColumnName(i).equals("AcctType")) {
+            isAcct = i;
+          }
+          if (rsmd.getColumnName(i).equals("AcctStatus")) {
+            isStat = i;
+          }
+        }
+
         switch (type) {
           case "Head":
             // create column headings
@@ -146,7 +231,13 @@ public class dbConnect {
             while (rst.next()) {
               html += "<tr " + rowStyle + ">";
               for (int i = 0; i < noCol; i++) {
-                html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                if (isAcct != 0 && i + 1 == isAcct) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountType(rst.getString(i + 1)) + "</td>\n";
+                } else if (isStat != 0 && i + 1 == isStat) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountStatus(rst.getString(i + 1)) + "</td>\n";
+                } else {
+                  html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                }
               }
               html += rowAddi;
               html += "</tr>\n";
@@ -157,14 +248,53 @@ public class dbConnect {
             while (rst.next()) {
               html += "<tr " + rowStyle + ">";
               for (int i = 0; i < noCol; i++) {
-                html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                if (isAcct != 0 && i + 1 == isAcct) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountType(rst.getString(i + 1)) + "</td>\n";
+                } else if (isStat != 0 && i + 1 == isStat) {
+                  html += "<td " + rowCellStyle + ">" + decodeAccountStatus(rst.getString(i + 1)) + "</td>\n";
+                } else {
+                  html += "<td " + rowCellStyle + ">" + rst.getString(i + 1) + "</td>\n";
+                }
               }
               html += rowAddi;
               html += "</tr>\n";
             }
             break;
         }
+        output = closeDB();
+        return html;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return output;
+    }
+  }
 
+  public String viewAccounts(String trStyle, String tdStyle, String buttonStyle) {
+    String html = "";
+    String output = openDB();
+    if (output.equals("OPEN")) {
+      try {
+        String sql = "SELECT AcctID, FName, LName, AcctType, Username, CreationDate FROM accounts WHERE AcctStatus = 1 ORDER BY LName, FName;";
+        rst = stm.executeQuery(sql);  // execute sql query - results in rst
+        rsmd = rst.getMetaData();           // } Get column count
+        int noCol = rsmd.getColumnCount();  // |
+
+        while (rst.next()) {
+          html += "<tr class='" + trStyle + "'>";
+
+          for (int i = 1; i <= noCol; i++) {
+            html += "<td class='" + tdStyle + "'>";
+            html += rst.getString(i);
+            html += "</td>";
+            html += "<input type='submit' value='Modify' class='" + buttonStyle + "', name='" + rst.getString(1) + "'/>";
+
+          }
+
+          html += "</tr>";
+        }
+        output = closeDB();
         return html;
       } catch (Exception e) {
         return e.getMessage();
@@ -178,9 +308,10 @@ public class dbConnect {
    *
    * @param trStyle row style
    * @param tdStyle cell style
+   * @param buttonStyle button style
    * @return headless html table of account requests
    */
-  public String viewAccountRequests(String trStyle, String tdStyle) {
+  public String viewAccountRequests(String trStyle, String tdStyle, String buttonStyle) {
     String html = "";
     String output = openDB();
     if (output.equals("OPEN")) {
@@ -197,41 +328,25 @@ public class dbConnect {
 
             html += "<td " + tdStyle + ">";
             if (i == 4) {
-              // decode account type
               switch (rst.getString(i + 1)) {
-                case "0":
-                  html += "Suspended";
-                  break;
-                case "1":
-                  html += "Account Holder";
-                  break;
-                case "2":
-                  html += "Clerk";
-                  break;
-                case "3":
-                  html += "Administrator";
-                  break;
-                default:
-                  html += "N/A";
-                  break;
-              }
+              html += decodeAccountType(rst.getString(i + 1));
             } else {
               html += rst.getString(i + 1);
-
             }
             html += "</td>";
           }
           // Add Action Buttons - Button name is "A-RequestID" or "D-RequestID"
           html += "<td " + tdStyle + ">";
-          html += "<input type='submit' value='Accept' name='A" + rst.getString(noCol) + "'/>";
+          html += "<input type='submit' value='Accept' class='" + buttonStyle + "', name='A" + rst.getString(noCol) + "'/>";
           html += "</td>";
 
           html += "<td " + tdStyle + ">";
-          html += "<input type='submit' value='Reject' name='R" + rst.getString(noCol) + "'/>";
+          html += "<input type='submit' value='Reject' class='" + buttonStyle + "',name='R" + rst.getString(noCol) + "'/>";
           html += "</td>";
 
           html += "</tr>";
         }
+        output = closeDB();
         return html;
 
       } catch (Exception e) {
@@ -247,13 +362,13 @@ public class dbConnect {
     String[] result = {""};
     return result;
   }
-  
+
   /**
-   * 
+   *
    * @param sql
    * @param user
    * @param pwd
-   * @return 
+   * @return
    */
   //Method to verify password. Avoids SQL injection
   public String[] isPwdValid(String sql, String user, String pwd) {
@@ -278,7 +393,7 @@ public class dbConnect {
         if (records == 0) {
           result[0] = "Error: Invalid Credentials";
         }
-      return result;
+        return result;
       } catch (Exception e) {
         String[] result = new String[1];
         result[0] = "Error: " + e.getMessage();
@@ -290,8 +405,7 @@ public class dbConnect {
       return result;
     }
   }
-  
-  
+
   /**
    *
    * @param input input values
@@ -312,7 +426,7 @@ public class dbConnect {
         System.out.println(pstm);
 
         for (int i = 1; i < noArgs; i++) {
-          pstm.setString(i, input[i]);     
+          pstm.setString(i, input[i]);
         }
         System.out.println(pstm);
 
@@ -358,8 +472,8 @@ public class dbConnect {
 
   /**
    *
-   * @param sql SQL statement
-   * @return String
+   * @param input
+   * @return
    */
   // Modify the database with an SQL statement
   public String updateDB(String... input) {
@@ -375,13 +489,13 @@ public class dbConnect {
         System.out.println(pstm);
 
         for (int i = 1; i < noArgs; i++) {
-          pstm.setString(i, input[i]);      
+          pstm.setString(i, input[i]);
         }
         System.out.println(pstm);
 
         pstm.executeUpdate(); // Execute query
         out = closeDB();
-        
+
       } catch (Exception e) {
         out = e.getMessage(); // get error message if sql fails
       }

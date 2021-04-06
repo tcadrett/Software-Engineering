@@ -1,6 +1,6 @@
 <%-- 
-    Document   : accountRequest
-    Created on : Mar 10, 2021, 12:03:01 PM
+    Document   : adminViewAccounts
+    Created on : Mar 27, 2021, 1:23:22 PM
     Author     : Terri
 --%>
 
@@ -11,9 +11,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>FSBank</title>
     <%@include file="header.jsp" %>
-
   </head>
-  <body>
+  <body id="myPage">
 
     <!-- To be added when login functionality is implemented
     <% /* // session control
@@ -25,54 +24,36 @@
 
     <%
       dbConnect dbconnect = new dbConnect();
-      //String formValue = request.getParameter("type");
-      //String sql = ";
-      //String args[] = dbconnect.queryDB(sql, name, type);
-      //out.print("Finish added!");
-      //session.getAttribute("logged").equals("Admin")
     %>
-
     <div class="w3-container w3-padding-32">
 
-      <div class="w3-section">
-        <h1>View Account Requests</h1>
-      </div>
-      <!--
-        Display table with option rows at end.
-      -->
-      <div class="w3-section w3-responsive ">
 
-        <form action="adminCreateAccount.jsp">
+      <h1>Active Accounts</h1>
+
+      <div class="w3-span">
+        <form action="adminModifyAccount.jsp">
           <table class="w3-table w3-striped w3-hoverable">
-            <tr class="w3-teal">
+            <tr class="w3-teal"> 
+              <th>Account ID</th>
               <th>First Name</th>
               <th>Last Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
               <th>Account Type</th>
-              <th  colspan="2">Action</th>
-            </tr>
-            <%
-              out.print(dbconnect.viewAccountRequests("", "", "w3-button w3-hover-grey w3-teal"));
+              <th>Username</th>
+              <th>Creation Date</th>
 
+            </tr>
+
+            <%
+              out.print(dbconnect.viewAccounts("", "", "w3-button w3-hover-grey w3-teal"));
             %>
 
           </table>
-
         </form>
-
-
       </div>
 
       <div class="w3-container">
         <a href="adminDashboard.jsp" class="w3-button w3-teal">Return to Dashboard</a>
       </div>
-
-
-
-
     </div>
-
-
   </body>
 </html>

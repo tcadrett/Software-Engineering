@@ -13,9 +13,11 @@
     <%@include file="header.jsp" %>
   </head>
   <body>
-    <div class="w3-container">
-      <h1>AccountCreationAction</h1>
-
+    <div class="w3-container w3-padding-32">
+      <div class="w3-section">
+        <h1>AccountCreationAction</h1>
+      </div>
+      <div class="w3-section">
       <%
         dbConnect dbconnect = new dbConnect();
         String FName = request.getParameter("FirstName");
@@ -25,8 +27,9 @@
         String AccountType = request.getParameter("AccountType");
         String defaultUsername = FName.substring(0, 1) + LName;
         String defaultPWD = FName.substring(0, 1).toLowerCase() + LName.substring(0, 1) + Phone + "!";
+        String AcctID = request.getParameter("acctID");
 
- /*
+        /*
           // Variables for creating usernames when defaultUsername is taken.
           String backupUsername = defaultUsername;
           int backupCount = 1;
@@ -35,26 +38,30 @@
             QueryResult = dbconnect.queryDB("Select Username FROM accounts WHERE Username = ?;", backupUsername);
           }
          */
- 
- 
         String result = "";
         String sql = "";
-        // Create New Account
-          sql = "INSERT INTO accounts(AcctID, FName, LName, Email, Phone, "
-                  + "AcctType, Username, Pwd, AcctStatus) VALUES (0,?,?,?,?,?,?,?,1);";
-          result = dbconnect.updateDB(sql, FName, LName, Email, Phone, AccountType, defaultUsername, defaultPWD);
-          if (result.equals("CLOSED")) {
-            out.print("<h2>Account for " + FName + " " + LName + " has been created.</h2>");
-            out.print("<p>First Name: " + FName + "</p>");
-            out.print("<p>Last Name: " + LName + "</p>");
-            out.print("<p>Email: " + Email + "</p>");
-            out.print("<p>Phone: " + Phone + "</p>");
-            out.print("<p>Username: " + "</p>");
-            out.print("<p>Password: " + defaultPWD + "</p>");
 
+        // Update account listing with new status
+        //sql = "UPDATE accounts(FName, LName, Email, Phone, AcctType, Username, Pwd, AcctStatus) WHERE AcctID = ? VALUES (0,?,?,?,?,?,?,?,1);";
+        sql = "UPDATE accounts "
+                + "SET FName = ?, LName = ?, Email = ?, Phone = ?, AcctType = ?, Username = ?, Pwd = ?, AcctStatus = 1 "
+                + "WHERE AcctID = ?;";
+        result = dbconnect.updateDB(sql, FName, LName, Email, Phone, AccountType, defaultUsername, defaultPWD, AcctID);
+        if (result.equals("CLOSED")) {
+          out.print("<h2>Account for " + FName + " " + LName + " has been created.</h2>");
+          out.print("<p>First Name: " + FName + "</p>");
+          out.print("<p>Last Name: " + LName + "</p>");
+          out.print("<p>Email: " + Email + "</p>");
+          out.print("<p>Phone: " + Phone + "</p>");
+          out.print("<p>Username: " + "</p>");
+          out.print("<p>Password: " + defaultPWD + "</p>");
+        } else {
+          out.print(result);
+        }
       %>
+      </div>
       <div class="w3-margin"></div>
-      <p><a href="adminViewRequest.jsp">Return to Requests</a></p>
+      <div class="w3-section"><a href="adminViewRequest.jsp" class="w3-button w3-teal">Return to Requests</a></div>
 
     </div>
   </div>
