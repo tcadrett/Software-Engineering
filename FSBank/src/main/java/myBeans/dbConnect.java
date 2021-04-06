@@ -271,31 +271,82 @@ public class dbConnect {
         }
     }
 
-    public String viewAccounts(String trStyle, String tdStyle, String buttonStyle) {
+//    public String viewAccounts(String trStyle, String tdStyle, String buttonStyle) {
+//        String html = "";
+//        String output = openDB();
+//        if (output.equals("OPEN")) {
+//            try {
+//                String sql = "SELECT AcctID, FName, LName, AcctType, Username, CreationDate FROM accounts WHERE AcctStatus = 1 ORDER BY LName, FName;";
+//                rst = stm.executeQuery(sql);  // execute sql query - results in rst
+//                rsmd = rst.getMetaData();           // } Get column count
+//                int noCol = rsmd.getColumnCount();  // |
+//
+//                while (rst.next()) {
+//                    html += "<tr class='" + trStyle + "'>";
+//
+//                    for (int i = 1; i <= noCol; i++) {
+//                        html += "<td class='" + tdStyle + "'>";
+//                        html += rst.getString(i);
+//                        html += "</td>";
+//                        html += "<input type='submit' value='Modify' class='" + buttonStyle + "', name='" + rst.getString(1) + "'/>";
+//
+//                    }
+//
+//                    html += "</tr>";
+//                }
+//                output = closeDB();
+//                return html;
+//            } catch (Exception e) {
+//                return e.getMessage();
+//            }
+//        } else {
+//            return output;
+//        }
+//    }
+
+        public String viewAccounts(String trStyle, String tdStyle, String buttonStyle) {
         String html = "";
         String output = openDB();
         if (output.equals("OPEN")) {
             try {
-                String sql = "SELECT AcctID, FName, LName, AcctType, Username, CreationDate FROM accounts WHERE AcctStatus = 1 ORDER BY LName, FName;";
+                String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctID FROM accounts WHERE AcctStatus = 1 ORDER BY AcctType, FName, LName, CreationDate;";
                 rst = stm.executeQuery(sql);  // execute sql query - results in rst
                 rsmd = rst.getMetaData();           // } Get column count
                 int noCol = rsmd.getColumnCount();  // |
+                 /*
+                    // Potential error text if no results are 
+                    html += "<tr class='" + trStyle + "'>";
+                    html += "<td class='" + tdStyle + "'>";
+                    html += "No entries to display!";
+                    html += "</td></tr>";
+                 */
 
                 while (rst.next()) {
                     html += "<tr class='" + trStyle + "'>";
+                    // Fill columns
+                    for (int i = 0; i < noCol - 1; i++) {
 
-                    for (int i = 1; i <= noCol; i++) {
                         html += "<td class='" + tdStyle + "'>";
-                        html += rst.getString(i);
+                        if (i == 4) {
+                            html += decodeAccountType(rst.getString(i + 1));
+                        } else {
+                            html += rst.getString(i + 1);
+                        }
                         html += "</td>";
-                        html += "<input type='submit' value='Modify' class='" + buttonStyle + "', name='" + rst.getString(1) + "'/>";
-
                     }
+                    // Add Action Buttons - 
+                    //Button name is "M#" where # is the account ID.
+                    //  noCol is the column where AcctID may be found
+                    html += "<td " + tdStyle + ">";
+                    html += "<input type='submit' value='Modify' class='" + buttonStyle + "', name='M" + rst.getString(noCol) + "'/>";
+                    html += "</td>";
 
                     html += "</tr>";
                 }
+
                 output = closeDB();
                 return html;
+
             } catch (Exception e) {
                 return e.getMessage();
             }
@@ -304,6 +355,8 @@ public class dbConnect {
         }
     }
 
+    
+    
     /**
      *
      * @param trStyle row style
@@ -316,17 +369,24 @@ public class dbConnect {
         String output = openDB();
         if (output.equals("OPEN")) {
             try {
-                String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctID FROM accounts WHERE AcctStatus = 0;";
+                String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctID FROM accounts WHERE AcctStatus = 0 ORDER BY CreationDate;";
                 rst = stm.executeQuery(sql);  // execute sql query - results in rst
                 rsmd = rst.getMetaData();           // } Get column count
                 int noCol = rsmd.getColumnCount();  // |
+                 /*
+                    // Potential error text if no results are 
+                    html += "<tr class='" + trStyle + "'>";
+                    html += "<td class='" + tdStyle + "'>";
+                    html += "No entries to display!";
+                    html += "</td></tr>";
+                 */
 
                 while (rst.next()) {
-                    html += "<tr " + trStyle + ">";
+                    html += "<tr class='" + trStyle + "'>";
                     // Fill columns
                     for (int i = 0; i < noCol - 1; i++) {
 
-                        html += "<td " + tdStyle + ">";
+                        html += "<td class='" + tdStyle + "'>";
                         if (i == 4) {
                             html += decodeAccountType(rst.getString(i + 1));
                         } else {
@@ -345,6 +405,7 @@ public class dbConnect {
 
                     html += "</tr>";
                 }
+
                 output = closeDB();
                 return html;
 
