@@ -4,7 +4,7 @@
     Author     : Terri
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="myBeans.dbConnect, java.sql.ResultSet"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -12,7 +12,11 @@
     <title>FSBank</title>
     <%@include file="header.jsp" %>
   </head>
-  <body>
+  <body id="myPage">
+    
+    <% 
+      dbConnect dbconnect = new dbConnect();
+    %>
 
     <!-- To be added when login functionality is implemented
     <% /* // session control
@@ -21,14 +25,24 @@
       }
        */%>
     -->
-    <div class="w3-container">
-      <h1>Administrator Dashboard</h1>
 
-      <p>
-        <a href="adminViewRequest.jsp">View account Requests</a>
-      </p>
-
+    <div class="w3-container w3-padding-32">
+      <div class="w3-section">
+        <h1>Welcome <%
+          // To be added when login functionality is implemented
+          %></h1>
+      </div>
+      <div class="w3-section">
+        <div class="w3-container">
+          <a class="w3-button" href="adminViewRequest.jsp">View Account Requests</a>
+        </div>
+        <div class="w3-container">
+          <a class="w3-button" href="adminViewAccounts.jsp">View Current Accounts</a>
+        </div> 
+      </div>
     </div>
+      
+  
   </body>
 
 </html>
