@@ -25,6 +25,7 @@ public class dbConnect {
     private ResultSet rst = null;
     private ResultSetMetaData rsmd = null;
 
+    
     /*-----------PRIVATE FUNCTIONS-----------------*/
     /**
      * Close current mySQL database connection
