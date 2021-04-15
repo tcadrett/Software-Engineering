@@ -25,6 +25,7 @@ public class dbConnect {
     private ResultSet rst = null;
     private ResultSetMetaData rsmd = null;
 
+    
     /*-----------PRIVATE FUNCTIONS-----------------*/
     /**
      * Close current mySQL database connection
@@ -482,9 +483,7 @@ public class dbConnect {
                 int noArgs = input.length;
 
                 pstm = conn.prepareStatement(input[0]);
-
                 System.out.println(pstm);
-
                 for (int i = 1; i < noArgs; i++) {
                     pstm.setString(i, input[i]);
                 }
