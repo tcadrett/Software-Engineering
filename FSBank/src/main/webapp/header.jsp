@@ -28,22 +28,11 @@
         <a href="index.jsp#account" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Account</a>
         <a href="index.jsp#contact" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
         <div class="w3-dropdown-hover w3-hide-small">
-          <button class="w3-button" title="SignUp">Sign Up <i class="fa fa-caret-down"></i></button>     
+          <button class="w3-button" title="Notifications">Sign Up <i class="fa fa-caret-down"></i></button>     
           <div class="w3-dropdown-content w3-card-4 w3-bar-block">
             <a href="accountRequest.jsp" class="w3-bar-item w3-button">Apply for Account!</a>
           </div>
         </div>
-        
-        <div class="w3-dropdown-hover w2-hide-small">
-            <button class = "w3-button" title="DEBUG"">Debug Access <i class="fa fa-caret-down"></i></button>
-            <div class="w3-dropdown-content w3-card-4 w3-bar-block">
-                <a href="DEBUG.jsp" class="w3-bar-item w3-button">DEBUG</a>
-                <a href="adminDashboard.jsp" class="w3-bar-item w3-button">Administrator Dashboard</a>
-                <a href="holderDashboard.jsp" class="w3-bar-item w3-button">Account Holder Dashboard</a>
-                <a href="clerkDashboard.jsp" class="w3-bar-item w3-button">Clerk Dashboard</a>
-            </div>
-        </div>
-        
         <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-hover-teal" title="Search"><i class="fa fa-search"></i></a>
         <a href="login.jsp" class="w3-bar-item w3-button w3-hide-small w3-right w3-hover-teal" title="Login">Log in</a>
       </div>
