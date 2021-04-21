@@ -25,7 +25,6 @@ public class dbConnect {
     private ResultSet rst = null;
     private ResultSetMetaData rsmd = null;
 
-    
     /*-----------PRIVATE FUNCTIONS-----------------*/
     /**
      * Close current mySQL database connection
@@ -304,8 +303,7 @@ public class dbConnect {
 //            return output;
 //        }
 //    }
-
-        public String viewAccounts(String trStyle, String tdStyle, String buttonStyle) {
+    public String viewAccounts(String trStyle, String tdStyle, String buttonStyle) {
         String html = "";
         String output = openDB();
         if (output.equals("OPEN")) {
@@ -314,7 +312,7 @@ public class dbConnect {
                 rst = stm.executeQuery(sql);  // execute sql query - results in rst
                 rsmd = rst.getMetaData();           // } Get column count
                 int noCol = rsmd.getColumnCount();  // |
-                 /*
+                /*
                     // Potential error text if no results are 
                     html += "<tr class='" + trStyle + "'>";
                     html += "<td class='" + tdStyle + "'>";
@@ -356,8 +354,6 @@ public class dbConnect {
         }
     }
 
-    
-    
     /**
      *
      * @param trStyle row style
@@ -374,7 +370,7 @@ public class dbConnect {
                 rst = stm.executeQuery(sql);  // execute sql query - results in rst
                 rsmd = rst.getMetaData();           // } Get column count
                 int noCol = rsmd.getColumnCount();  // |
-                 /*
+                /*
                     // Potential error text if no results are 
                     html += "<tr class='" + trStyle + "'>";
                     html += "<td class='" + tdStyle + "'>";
@@ -416,6 +412,64 @@ public class dbConnect {
         } else {
             return output;
         }
+    }
+
+    /**
+     * @param ledger // ledger ID
+     * @param ledgerType // ledger type: checking, savings, credit, loan
+     * @return html // html code for ledger widget
+     */
+    public String ledgerWidget(String ledger, String ledgerType) {
+        String html = "";
+        String[] values = {" ", " ", " ", " "};
+        String[] titles = {"Title", "Balance:", "Interest:", "Card # ", "Payment Due Date:"};
+
+        // populate values and titles based on account type and database output
+        switch (ledgerType) {
+            case "checking":
+                values = queryDB("SELECT Balance, Interest FROM checking WHERE CheckingID = ?;", ledger);
+                titles[0] = "Checking Account # " + ledger;
+                break;
+            case "savings":
+                values = queryDB("SELECT Balance, Interest FROM savings WHERE SavingsID = ?;", ledger);
+                titles[0] = "Savings Account # " + ledger;
+                break;
+            case "credit":
+                values = queryDB("SELECT Balance, APR, CardNumber, DueDate FROM credit WHERE CreditID = ?;", ledger);
+                titles[0] = "Credit Account # " + ledger;
+                titles[2] = "APR:";
+                break;
+            case "loan":
+                values = queryDB("SELECT Balance, APR, Principal, DueDate FROM loans WHERE LoanID = ?;", ledger);
+                titles[0] = "Loan Account # " + ledger;
+                titles[2] = "APR:";
+                titles[3] = "Principal:";
+                break;
+            default:
+                break;
+        }
+
+        html +=   "                    <div class=\"w3-container w3-teal\">\n"
+                + "                        <h2> " + titles[0] + "</h2>\n"
+                + "                    </div>\n"
+                
+                + "                    <div class=\"w3-container\">\n"
+                + "                        <table class=\"w3-table\">\n";
+
+                System.out.println(values.length);
+        for (int i = 0; i < values.length; i++) {
+            if (!values[i].equals(" ")) {
+                System.out.println(ledger + " " + ledgerType + i);
+
+                html += ("<tr> <td>" + titles[i + 1]
+                        + "</td> <td>" + values[i]
+                        + "</td> </tr>");
+            }
+        }
+
+        html += "                        </table>\n"
+                + "                    </div>";
+        return html;
     }
 
 // Validate login credentials
