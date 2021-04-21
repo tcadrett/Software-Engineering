@@ -17,6 +17,7 @@
 
             <%
                 dbConnect dbconnect = new dbConnect();
+<<<<<<< HEAD
                 String acctID = "";
                 String newAcctID = "";
                 if (session.getAttribute("acctID") == null) {
@@ -28,10 +29,17 @@
                 }
 
                 if (!acctID.equals("NULL") && !acctID.equals(newAcctID)) {
+=======
+                String acctID = session.getAttribute("acctID").toString();
+                String newAcctID = request.getParameter("AcctID");
+
+                if (newAcctID != null) {
+>>>>>>> 3c2e1ea... Work on Sprint 4
                     acctID = newAcctID;
                     session.setAttribute("acctID", acctID);
                 }
 
+<<<<<<< HEAD
                 String acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", "1")[0];
 //                String acctType[] = {""};
 //                if(!acctID.equals("NULL")){
@@ -41,6 +49,12 @@
 //                if (!acctID.equals(null)) {
 //                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", acctID);
 //                }
+=======
+                String acctType[] = {""};
+                if (!acctID.equals(null)) {
+                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", acctID);
+                }
+>>>>>>> 3c2e1ea... Work on Sprint 4
 //                
 //                String userAcct = "";
 //                userAcct = request.getParameter("AcctID");
