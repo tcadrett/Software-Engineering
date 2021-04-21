@@ -17,18 +17,30 @@
 
             <%
                 dbConnect dbconnect = new dbConnect();
-                String acctID = session.getAttribute("acctID").toString();
-                String newAcctID = request.getParameter("AcctID");
+                String acctID = "";
+                String newAcctID = "";
+                if (session.getAttribute("acctID") == null) {
+                    out.print("<p>AcctID is null. No user is signed in.</p>");
+                    acctID = "NULL";
+                    session.setAttribute("acctID", "-1");
+                } else {
+                    acctID = session.getAttribute("acctID").toString();
+                }
 
-                if (newAcctID != null) {
+                if (!acctID.equals("NULL") && !acctID.equals(newAcctID)) {
                     acctID = newAcctID;
                     session.setAttribute("acctID", acctID);
                 }
 
-                String acctType[] = {""};
-                if (!acctID.equals(null)) {
-                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", acctID);
-                }
+                String acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", "1")[0];
+//                String acctType[] = {""};
+//                if(!acctID.equals("NULL")){
+//                    acctType = dbconnect.queryDB("");
+//                }
+//                String acctType[] = {""};
+//                if (!acctID.equals(null)) {
+//                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", acctID);
+//                }
 //                
 //                String userAcct = "";
 //                userAcct = request.getParameter("AcctID");
