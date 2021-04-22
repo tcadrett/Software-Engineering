@@ -13,6 +13,7 @@
     </head>
     <body id="myPage">
         <%
+
             dbConnect dbConnect = new dbConnect();
             String selection = request.getQueryString(); // get query
 
@@ -21,6 +22,8 @@
             //      viewAccountDetails.jsp
             //  "R#=Return to Account Details"
             //      modifyAccountInfoAction.jsp
+            //  "A#=HolderAccount"
+            //      DEBUG.jsp
             String AcctID = "";
             char source = selection.charAt(0);
             switch (source) {
@@ -30,12 +33,15 @@
                 case 'R': // Entering from "Modify Account Info Action" page
                     AcctID = selection.substring(1, selection.length() - 26);
                     break;
+                case 'A': // Entering from debug page
+                    AcctID = session.getAttribute("acctID").toString();
+                    break;
             }
 
             String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctStatus, Username FROM accounts WHERE AcctID = ?;";
-
+            String viewer = session.getAttribute("acctID").toString();
             String[] result = dbConnect.queryDB(sql, AcctID);
-
+            String[] viewerType = dbConnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?", viewer);
 
         %>
 
@@ -47,9 +53,18 @@
             <h2> Error: No accounts found!</h2>
             <!-- Error Output -->
 
-            <% } else {%>            <!-- Display Information -->
+            <% } else {
+                //<!-- Display Information -->
+                if (viewerType[0].equals("0") || viewerType[0].equals("1")) {   // if a user %> 
 
+            <div class="w3-container">
+                <h1>Welcome <%out.print(result[0]);%>!</h1>
+                <form class="w3-container" action="modifyAccountInfo.jsp">
+                    <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print("E" + AcctID); %>'/>
+                </form>
+            </div>
 
+            <%} else if (viewerType[0].equals("2") || viewerType[0].equals("3")) { // if faculty%>  
             <!-- Basic Info -->
             <div class="w3-container">
                 <h1>Account Details</h1>
@@ -87,11 +102,13 @@
                     <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print("E" + AcctID); %>'/>
                 </form>
             </div>
+            <%}%>
+
             <div class="w3-margin"> </div>
 
             <!-- Account Tables-->
             <div class="w3-container">
-                <%
+                <%                    
                     String CheckingSQL = "SELECT CheckingID, Balance, Interest FROM checking WHERE AcctID = " + AcctID + ";";
                     String SavingSQL = "SELECT SavingsID, Balance, Interest FROM savings WHERE AcctID = " + AcctID + ";";
                     String CreditSQL = "SELECT CreditID, CardNumber, Balance, CreditLimit, APR, DueDate FROM credit WHERE AcctID = " + AcctID + ";";
