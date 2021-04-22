@@ -2,3 +2,25 @@ Testing Github Repairs
 
 
 Let's push a commit to Apr22Reset, off of commit 3d16c1f7
+
+Ok, that seemed to work. Let's check what our branches are and which holds what data:
+
+Terri---Sprint-4 / origin
+    commit: a47cf42bd084eefc2793ae3fc66bf6701b16f93c
+    Holds my aborted attempt to create a ledgerWidget.jsp and seperate account holder dashboard.
+
+main / origin       origin/HEAD
+    commit: 15f87eda2bcce52f5d8044919387d99157a261bf
+    These seem to both point to the same commit, and contain buggy text due to an aborted github merge.
+
+Terri---Sprint-4-Rebuild / origin
+    commit: 184a17acaf1be4fd36b630a175af6e38ba739c52
+    Just added the target directory to gitIgnore.
+
+Apr22Reset
+    commit: f5d12e7161e9705889eb0d5956591a7c68e110cb
+    Current branch from line 4 above, used to test.
+
+origin / Apr22Reset
+    commit: c76fb646b0470e3ae2b71cce2940ea5d3a62f20a
+    Appears to have commit a47cf42bd084eefc2793ae3fc66bf6701b16f93c (where Terri---Sprint-4 is currently set?) applied?
