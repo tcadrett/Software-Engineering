@@ -24,3 +24,8 @@ Apr22Reset
 origin / Apr22Reset
     commit: c76fb646b0470e3ae2b71cce2940ea5d3a62f20a
     Appears to have commit a47cf42bd084eefc2793ae3fc66bf6701b16f93c (where Terri---Sprint-4 is currently set?) applied?
+
+
+Ok, that last commit to Apr22Reset turned it into Apr22Reset / origin... so it remerged with origin / Apr22Reset?
+Will my uncommitted changes - apparently not associated with origin / Apr22Reset be applied to Apr22Reset?
+(It says "Ctrl-Enter to commit on Apr22Reset)
