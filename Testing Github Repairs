@@ -29,3 +29,5 @@ origin / Apr22Reset
 Ok, that last commit to Apr22Reset turned it into Apr22Reset / origin... so it remerged with origin / Apr22Reset?
 Will my uncommitted changes - apparently not associated with origin / Apr22Reset be applied to Apr22Reset?
 (It says "Ctrl-Enter to commit on Apr22Reset)
+
+Yes. Yes it did.
