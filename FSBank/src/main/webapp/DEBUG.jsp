@@ -17,18 +17,56 @@
 
             <%
                 dbConnect dbconnect = new dbConnect();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                String acctID = "";
+                String newAcctID = "";
+                if (session.getAttribute("acctID") == null) {
+                    out.print("<p>AcctID is null. No user is signed in.</p>");
+                    acctID = "NULL";
+                    session.setAttribute("acctID", "-1");
+                } else {
+                    acctID = session.getAttribute("acctID").toString();
+                }
+
+                if (!acctID.equals("NULL") && !acctID.equals(newAcctID)) {
+=======
+>>>>>>> Terri---Sprint-4-rebuild
                 String acctID = session.getAttribute("acctID").toString();
                 String newAcctID = request.getParameter("AcctID");
 
                 if (newAcctID != null) {
+<<<<<<< HEAD
+=======
+>>>>>>> 3c2e1ea... Work on Sprint 4
+>>>>>>> Terri---Sprint-4-rebuild
                     acctID = newAcctID;
                     session.setAttribute("acctID", acctID);
                 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                String acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", "1")[0];
+//                String acctType[] = {""};
+//                if(!acctID.equals("NULL")){
+//                    acctType = dbconnect.queryDB("");
+//                }
+//                String acctType[] = {""};
+//                if (!acctID.equals(null)) {
+//                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", acctID);
+//                }
+=======
+>>>>>>> Terri---Sprint-4-rebuild
                 String acctType[] = {""};
                 if (!acctID.equals(null)) {
                     acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", acctID);
                 }
+<<<<<<< HEAD
+=======
+>>>>>>> 3c2e1ea... Work on Sprint 4
+>>>>>>> Terri---Sprint-4-rebuild
 //                
 //                String userAcct = "";
 //                userAcct = request.getParameter("AcctID");
