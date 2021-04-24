@@ -17,24 +17,19 @@
 
             <%
                 dbConnect dbconnect = new dbConnect();
-                String acctID = session.getAttribute("acctID").toString();
-                String newAcctID = request.getParameter("AcctID");
+                String acctID = "1";
+                String newAcctID = request.getParameter("newAcctID");
+                String[] acctType = {" "};
 
-                if (newAcctID != null) {
+                if (!acctID.equals(newAcctID)) {
                     acctID = newAcctID;
                     session.setAttribute("acctID", acctID);
                 }
+                if (!acctID.equals(" ")) {
+                acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE acctID = ?;", acctID);
 
-                String acctType[] = {""};
-                if (!acctID.equals(null)) {
-                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", acctID);
                 }
-//                
-//                String userAcct = "";
-//                userAcct = request.getParameter("AcctID");
-//                if (!userAcct.isEmpty()) {
-//                    session.setAttribute("acctID", userAcct);
-//            %>
+//        %>
 
 
             <div class="w3-row">
@@ -75,7 +70,7 @@
                 <div class="w3-col m4">
                     <form class="w3-form" action="DEBUG.jsp">
                         <label>Sign is as account #</label>
-                        <input class="w3-input" type ="text" name="AcctID" value="<%out.print(acctID);%>" size="20" />
+                        <input class="w3-input" type ="text" name="newAcctID" value="<%out.print(acctID);%>" size="20" />
                         <input type="submit" value="Go" class="w3-button w3-teal w3-margin"/>
                     </form>
                 </div>
