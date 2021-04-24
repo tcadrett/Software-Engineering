@@ -425,51 +425,68 @@ public class dbConnect {
         String[] titles = {"Title", "Balance:", "Interest:", "Card # ", "Payment Due Date:"};
 
         // populate values and titles based on account type and database output
-        switch (ledgerType) {
-            case "checking":
-                values = queryDB("SELECT Balance, Interest FROM checking WHERE CheckingID = ?;", ledger);
-                titles[0] = "Checking Account # " + ledger;
-                break;
-            case "savings":
-                values = queryDB("SELECT Balance, Interest FROM savings WHERE SavingsID = ?;", ledger);
-                titles[0] = "Savings Account # " + ledger;
-                break;
-            case "credit":
-                values = queryDB("SELECT Balance, APR, CardNumber, DueDate FROM credit WHERE CreditID = ?;", ledger);
-                titles[0] = "Credit Account # " + ledger;
-                titles[2] = "APR:";
-                break;
-            case "loan":
-                values = queryDB("SELECT Balance, APR, Principal, DueDate FROM loans WHERE LoanID = ?;", ledger);
-                titles[0] = "Loan Account # " + ledger;
-                titles[2] = "APR:";
-                titles[3] = "Principal:";
-                break;
-            default:
-                break;
-        }
+        try {
+            switch (ledgerType) {
+                case "checking":
+                    values = queryDB("SELECT Balance, Interest FROM checking WHERE CheckingID = ?;", ledger);
+                    titles[0] = "Checking Account # " + ledger;
+                    break;
+                case "savings":
+                    values = queryDB("SELECT Balance, Interest FROM savings WHERE SavingsID = ?;", ledger);
+                    titles[0] = "Savings Account # " + ledger;
+                    break;
+                case "credit":
+                    values = queryDB("SELECT Balance, APR, CardNumber, DueDate FROM credit WHERE CreditID = ?;", ledger);
+                    titles[0] = "Credit Account # " + ledger;
+                    titles[2] = "APR:";
+                    break;
+                case "loan":
+                    values = queryDB("SELECT Balance, APR, Principal, DueDate FROM loans WHERE LoanID = ?;", ledger);
+                    titles[0] = "Loan Account # " + ledger;
+                    titles[2] = "APR:";
+                    titles[3] = "Principal:";
+                    break;
+                default:
+                    break;
+            }
 
-        html +=   "                    <div class=\"w3-container w3-teal\">\n"
-                + "                        <h2> " + titles[0] + "</h2>\n"
-                + "                    </div>\n"
-                
-                + "                    <div class=\"w3-container\">\n"
-                + "                        <table class=\"w3-table\">\n";
+            html += "                    <div class=\"w3-container w3-teal\">\n"
+                    + "                        <h2> " + titles[0] + "</h2>\n"
+                    + "                    </div>\n"
+                    + "                    <div class=\"w3-container\">\n"
+                    + "                        <table class=\"w3-table\">\n";
 
-                System.out.println(values.length);
-        for (int i = 0; i < values.length; i++) {
-            if (!values[i].equals(" ")) {
-                System.out.println(ledger + " " + ledgerType + i);
+            System.out.println(values.length);
+            for (int i = 0; i < values.length; i++) {
+                if (!values[i].equals(" ")) {
+                    System.out.println(ledger + " " + ledgerType + i);
 
-                html += ("<tr> <td>" + titles[i + 1]
-                        + "</td> <td>" + values[i]
-                        + "</td> </tr>");
+                    html += ("<tr> <td>" + titles[i + 1] + "</td> <td>");
+
+                    //TODO FIX FORMATTING
+                    if (i == 1) {
+                        html += "$";
+                    }
+                    html += values[i];
+                    if (i == 2) {
+                        html += "%";
+                    }
+
+                    html += "</td> </tr>";
+                }
+            }
+
+            html += "                        </table>\n"
+                    + "                    </div>";
+            return html;
+        } catch (Exception e) {
+            html = e.getMessage();
+            if (html == null) {
+                return " ";
+            } else {
+                return html;
             }
         }
-
-        html += "                        </table>\n"
-                + "                    </div>";
-        return html;
     }
 
 // Validate login credentials

@@ -17,16 +17,17 @@
 
             <%
                 dbConnect dbconnect = new dbConnect();
-                String acctID = "1";
-                String newAcctID = request.getParameter("newAcctID");
+                String acctID = " ";
+                String newAcctID = " ";
+                newAcctID = request.getParameter("newAcctID");
                 String[] acctType = {" "};
 
                 if (!acctID.equals(newAcctID)) {
                     acctID = newAcctID;
                     session.setAttribute("acctID", acctID);
                 }
-                if (!acctID.equals(" ")) {
-                acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE acctID = ?;", acctID);
+                if (acctID != null) {
+                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE acctID = ?;", acctID);
 
                 }
 //        %>

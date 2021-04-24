@@ -109,75 +109,49 @@
             <!-- Account Tables-->
             <div class="w3-container">
                 <%                    
-                    String CheckingSQL = "SELECT CheckingID, Balance, Interest FROM checking WHERE AcctID = " + AcctID + ";";
-                    String SavingSQL = "SELECT SavingsID, Balance, Interest FROM savings WHERE AcctID = " + AcctID + ";";
-                    String CreditSQL = "SELECT CreditID, CardNumber, Balance, CreditLimit, APR, DueDate FROM credit WHERE AcctID = " + AcctID + ";";
-                    String LoanSQL = "SELECT LoanID, Principal, Balance, APR, DueDate FROM loans WHERE AcctID = " + AcctID + ";";
+                    String CheckingSQL = "SELECT CheckingID FROM checking WHERE AcctID = " + AcctID + ";";
+                    String SavingsSQL = "SELECT SavingsID FROM savings WHERE AcctID = " + AcctID + ";";
+                    String CreditSQL = "SELECT CreditID FROM credit WHERE AcctID = " + AcctID + ";";
+                    String LoanSQL = "SELECT LoanID FROM loans WHERE AcctID = " + AcctID + ";";
+
+                    String[] ledgers;
                 %>
 
-                <!-- List Checking Accounts -->
+
+
                 <div class="w3-container">
-                    <h3>Checking Accounts:</h3>
+                    <h2>Ledger Widget</h2>
+                    <%
+                        ledgers = dbConnect.queryDB(CheckingSQL);
+                        for (int i = 0; i < ledgers.length; i++) {
+                            out.print(dbConnect.ledgerWidget(ledgers[i], "checking"));
+                        }
+                    %>
+                    <div class="w3-margin"></div>
+                    <%
+                        ledgers = dbConnect.queryDB(SavingsSQL);
+                        for (int i = 0; i < ledgers.length; i++) {
+                            out.print(dbConnect.ledgerWidget(ledgers[i], "savings"));
+                        }
+                    %>
+                    <div class="w3-margin"></div>
+                    <%
+                        ledgers = dbConnect.queryDB(CreditSQL);
+                        for (int i = 0; i < ledgers.length; i++) {
+                            out.print(dbConnect.ledgerWidget(ledgers[i], "credit"));
+                        }
+                    %>
+                    <div class="w3-margin"></div>
+                    <%
+                        ledgers = dbConnect.queryDB(LoanSQL);
+                        for (int i = 0; i < ledgers.length; i++) {
+                            out.print(dbConnect.ledgerWidget(ledgers[i], "loan"));
+                        }
+                    %>
+                    <div class="w3-margin"></div>
                 </div>
-                <table class="w3-container w3-table w3-striped">
-                    <tr class="w3-teal">
-                        <th>Account Number</th>
-                        <th>Balance</th>
-                        <th>Interest Rate</th>
-                    </tr>
-                    <% out.print(dbConnect.htmlTableQuery(CheckingSQL, "Headless", "", "", "", "", "", ""));%>
-                </table>
 
-                <!-- List Savings Accounts -->
-                <div class="w3-container">
-                    <h3>Savings Accounts:</h3>
-                </div>
-                <table class="w3-container w3-table w3-striped">
-                    <tr class="w3-teal">
 
-                        <th>Account Number</th>
-                        <th>Balance</th>
-                        <th>Interest Rate</th>
-                    </tr>
-
-                    <% out.print(dbConnect.htmlTableQuery(SavingSQL, "Headless", "", "", "", "", "", ""));%>
-
-                </table>
-
-                <!-- List Credit Card Accounts -->
-                <div class="w3-container">
-                    <h3>Credit Accounts:</h3>
-                </div>
-                <table class="w3-container w3-table w3-striped">
-                    <tr class="w3-teal">
-                        <th>Account Number</th>
-                        <th>Card Number</th>
-                        <th>Balance</th>
-                        <th>Credit Limit</th>
-                        <th>APR</th>
-                        <th>Payment Due Date</th>
-                    </tr>
-
-                    <% out.print(dbConnect.htmlTableQuery(CreditSQL, "Headless", "", "", "", "", "", ""));%>
-
-                </table>
-
-                <!-- List Loans -->
-                <div class="w3-container">
-                    <h3>Loans</h3>
-                </div>
-                <table class="w3-container w3-table w3-striped">
-                    <tr class="w3-teal">
-                        <th>Account Number</th>
-                        <th>Principal</th>
-                        <th>Balance</th>
-                        <th>APR</th>
-                        <th>Payment Due Date</th>
-                    </tr>
-
-                    <% out.print(dbConnect.htmlTableQuery(LoanSQL, "Headless", "", "", "", "", "", ""));%>
-
-                </table>                
             </div>
 
             <% } // END Info Display%>
