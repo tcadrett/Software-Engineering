@@ -464,12 +464,30 @@ public class dbConnect {
                     html += ("<tr> <td>" + titles[i + 1] + "</td> <td>");
 
                     //TODO FIX FORMATTING
-                    if (i == 1) {
-                        html += "$";
-                    }
-                    html += values[i];
-                    if (i == 2) {
-                        html += "%";
+                    switch (i) {
+                        default:
+                            break;
+                        case 0: // balance
+                            html += "$";
+                            html += String.format("%.2f", Double.parseDouble(values[i]));
+                            break;
+                        case 1: // interest
+                            html += String.format("%.2f", Double.parseDouble(values[i]));
+                            html += "%";
+                            break;
+                        case 2: // principal or card number
+                            switch (ledgerType) {
+                                case "credit":
+                                    html += values[i];
+                                    break;
+                                case "loan":
+                                    html += "$";
+                                    html += String.format("%.2f", Double.parseDouble(values[i]));
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
                     }
 
                     html += "</td> </tr>";
@@ -481,11 +499,10 @@ public class dbConnect {
             return html;
         } catch (Exception e) {
             html = e.getMessage();
-            if (html == null) {
-                return " ";
-            } else {
-                return html;
+            if (html != null) {
+                System.out.println("Error in ledgerWidget: " + html);
             }
+            return "";
         }
     }
 
