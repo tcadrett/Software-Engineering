@@ -42,8 +42,10 @@
                             <th>Last Name</th>
                             <th>Account Type</th>
                             <th>Username</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Creation Date</th> 
                             <th></th>
-
                         </tr>
 
                         <%                            

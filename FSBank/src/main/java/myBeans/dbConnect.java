@@ -308,7 +308,7 @@ public class dbConnect {
         String output = openDB();
         if (output.equals("OPEN")) {
             try {
-                String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctID FROM accounts WHERE AcctStatus = 1 ORDER BY AcctType, FName, LName, CreationDate;";
+                String sql = "SELECT AcctID, FName, LName, AcctType, Username, Email, Phone, CreationDate FROM accounts WHERE AcctStatus = 1 ORDER BY AcctType, FName, LName, CreationDate;";
                 rst = stm.executeQuery(sql);  // execute sql query - results in rst
                 rsmd = rst.getMetaData();           // } Get column count
                 int noCol = rsmd.getColumnCount();  // |
@@ -323,10 +323,10 @@ public class dbConnect {
                 while (rst.next()) {
                     html += "<tr class='" + trStyle + "'>";
                     // Fill columns
-                    for (int i = 0; i < noCol - 1; i++) {
+                    for (int i = 0; i < noCol ; i++) {
 
                         html += "<td class='" + tdStyle + "'>";
-                        if (i == 4) {
+                        if (i == 3) {
                             html += decodeAccountType(rst.getString(i + 1));
                         } else {
                             html += rst.getString(i + 1);
