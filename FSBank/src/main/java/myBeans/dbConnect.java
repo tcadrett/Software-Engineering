@@ -337,7 +337,7 @@ public class dbConnect {
                     //Button name is "M#" where # is the account ID.
                     //  noCol is the column where AcctID may be found
                     html += "<td " + tdStyle + ">";
-                    html += "<input type='submit' value='Details' class='" + buttonStyle + "', name='M" + rst.getString(noCol) + "'/>";
+                    html += "<input type='submit' value='Details' class='" + buttonStyle + "', name='M" + rst.getString(1) + "'/>";
                     html += "</td>";
 
                     html += "</tr>";

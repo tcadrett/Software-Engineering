@@ -57,6 +57,7 @@
 
                     if (result.equals("CLOSED")) {
                         out.print("<h2>Account for " + FName + " " + LName + " has been updated.</h2>");
+                        out.print("<p>Account:" + AcctID + "</p>");
                         out.print("<p>First Name: " + FName + "</p>");
                         out.print("<p>Last Name: " + LName + "</p>");
                         out.print("<p>Email: " + Email + "</p>");

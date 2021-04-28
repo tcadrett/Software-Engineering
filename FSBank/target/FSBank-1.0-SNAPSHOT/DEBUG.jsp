@@ -29,10 +29,8 @@
                     session.setAttribute("acctID", acctID);
                 }
 
-                String sql = "SELECT AcctType FROM accounts WHERE acctID = " + acctID + ";";
-
                 if (!acctID.equals("-1")) {
-                    acctType = dbconnect.queryDB(sql);
+                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE acctID = ?;", acctID);
                 }
 
             %>
@@ -41,7 +39,14 @@
             <div class="w3-row">
                 <div class="w3-col m4">
                     <%switch (acctType[0].charAt(0)) {
-                            case '1':
+                            case '0':
+                    %>
+                    <form action="accountDetails.jsp">
+                        <input type="submit" class="w3-button w3-teal" value="Holder Dashboard" name="A<%out.print(acctID);%>"/>
+                    </form>
+                    <%
+                            break;
+                        case '1':
                     %>
                     <form action="accountDetails.jsp">
                         <input type="submit" class="w3-button w3-teal" value="Holder Dashboard" name="A<%out.print(acctID);%>"/>

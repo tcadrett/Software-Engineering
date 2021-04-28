@@ -13,10 +13,19 @@
     </head>
     <body id="myPage">
         <%
+            dbConnect dbconnect = new dbConnect();
 
-            dbConnect dbConnect = new dbConnect();
+            String viewerID = "-1";
+            int viewerPermiss = -1;
+            try {
+                viewerID = session.getAttribute("acctID").toString();
+                viewerPermiss = Integer.parseInt(dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", viewerID)[0]);
+            } catch (Exception e) {
+                // do nothing. viewerID is already -1
+            }
+
+            //** Resolve acctID based on prior page
             String selection = request.getQueryString(); // get query
-
             // Extract AcctID from ID String based on previous page:
             //  "M#=Modify"
             //      viewAccountDetails.jsp
@@ -24,96 +33,128 @@
             //      modifyAccountInfoAction.jsp
             //  "A#=HolderAccount"
             //      DEBUG.jsp
-            String AcctID = "";
+            String acctID = "";
             char source = selection.charAt(0);
             switch (source) {
-                case 'M': // Entering from "View Accounts" page
-                    AcctID = selection.substring(1, selection.length() - 8);
+                case 'M':
+                    acctID = selection.substring(2, selection.length() - 8);
                     break;
-                case 'R': // Entering from "Modify Account Info Action" page
-                    AcctID = selection.substring(1, selection.length() - 26);
+                case 'R':
+                    acctID = selection.substring(1, selection.length() - 26);
                     break;
-                case 'A': // Entering from debug page
-                    AcctID = session.getAttribute("acctID").toString();
+                case 'A':
+                    try {
+                        acctID = session.getAttribute("acctID").toString();
+                        acctID.strip();
+                    } catch (Exception e) {
+                        acctID = "-1";
+                    }
+                    break;
+                default:
+                    out.print("<h1>ERROR: Where are we from?</h1>");
                     break;
             }
 
-            String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctStatus, Username FROM accounts WHERE AcctID = ?;";
-            String viewer = session.getAttribute("acctID").toString();
-            String[] result = dbConnect.queryDB(sql, AcctID);
-            String[] viewerType = dbConnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?", viewer);
-
         %>
-
+        <!-- BEGIN CONTENT -->
         <div class="w3-container w3-padding-32">
 
-            <!-- Error Output -->
-            <% if (result[0] == "Error: No records found") {%>
 
-            <h2> Error: No accounts found!</h2>
-            <!-- Error Output -->
+            <%// Fetch account information from the database
+                //                     0      1      2      3       4          5          6
+                String sql = "SELECT FName, LName, Email, Phone, AcctType, AcctStatus, Username FROM accounts WHERE AcctID = ?;";
+                String[] result = dbconnect.queryDB(sql, acctID);
+                if (result.length != 7) {
+                    out.print("ERROR: Source is " + selection);
+                    for (int i = 0; i < 7; i++) {
+                        result[i] = "0";
+                    }
+                }
+            %>
 
-            <% } else {
-                //<!-- Display Information -->
-                if (viewerType[0].equals("0") || viewerType[0].equals("1")) {   // if a user %> 
+            <%            // DEBUG OUTPUT
+                out.print("<div class=\"w3-container w3-card w3-margin w3-grey\">");
+                out.print("<p>DEBUG</p>");
+                out.print("<p>AcctID: " + acctID + "</p>");
+                out.print("<p>AcctPermiss: " + result[4] + "</p>");
+                out.print("<p>ViewerID: " + viewerID + "</p>");
+                out.print("<p>ViewerPermiss: " + viewerPermiss + "</p>");
+
+                out.print("<ul>");
+                for (int i = 0; i < result.length; i++) {
+                    out.print("<li>Index " + i + ": " + result[i] + "</li>");
+                }
+                out.print("</ul>");
+
+                out.print("</div>");
+
+            %>
+
 
             <div class="w3-container">
+                <!-- Title -->
+                <%                    // Title if viewer is an account holder or suspended
+                    if (viewerPermiss == 0 || viewerPermiss == 1) {
+                %>
                 <h1>Welcome <%out.print(result[0]);%>!</h1>
-                <form class="w3-container" action="modifyAccountInfo.jsp">
-                    <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print("E" + AcctID); %>'/>
-                </form>
+                <%
+                } else if (viewerPermiss == 2 || viewerPermiss == 3) {
+                %>
+                <h1>Account #<%out.print(acctID);%>.</h1>
+                <%
+                    }
+                %>
             </div>
 
-            <%} else if (viewerType[0].equals("2") || viewerType[0].equals("3")) { // if faculty%>  
-            <!-- Basic Info -->
-            <div class="w3-container">
-                <h1>Account Details</h1>
-                <table class="w3-table w3-striped w3-container">
-                    <tr>
-                        <td>First Name:</td>
-                        <td><% out.print(result[0]); %></td>
-                    </tr>
-                    <tr>
-                        <td>Last Name:</td>
-                        <td><% out.print(result[1]); %></td>
-                    </tr>
-                    <tr>
-                        <td>Username:</td>
-                        <td><% out.print(result[6]);%></td>
-                    </tr>
-                    <tr>
-                        <td>Email:</td>
-                        <td><% out.print(result[2]); %></td>
-                    </tr>
-                    <tr>
-                        <td>Phone:</td>
-                        <td><% out.print(result[3]); %></td>
-                    </tr>
-                    <tr>
-                        <td>Account Type:</td>
-                        <td><% out.print(dbConnect.decodeAccountType(result[4]));  %></td>
-                    </tr>
-                    <tr>
-                        <td>Account Status:</td>
-                        <td><% out.print(dbConnect.decodeAccountStatus(result[5])); %></td>
-                    </tr>
-                </table>
-                <form class="w3-container" action="modifyAccountInfo.jsp">
-                    <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print("E" + AcctID); %>'/>
-                </form>
-            </div>
-            <%}%>
-            <div class="w3-margin"> </div>
+
 
             <div class="w3-row">
                 <div class="w3-col m6">
+
+                    <%
+                        if (result[4].equals("0")) {
+                    %>
+                    <div class="w3-container w3-card w3-red">
+                        <h2><strong>ALERT</strong></h2>
+                        <p><strong>Account <%out.print(acctID);%> for <%out.print(result[0] + " " + result[1]);%> is currently suspended! Contact the support desk for help.</strong></p>
+                    </div>
+                    <%
+                        }
+                    %>
+
+                    <!-- Info -->
+
+                    <div class="w3-container">
+                        <table class="w3-table">
+                            <%
+                                if (viewerPermiss == 2 || viewerPermiss == 3) {
+                            %>
+                            <tr><td>First Name:</td><td><%out.print(result[0]);%></td></tr>
+                            <tr><td>Last Name:</td><td><%out.print(result[1]);%></td></tr>
+                            <tr><td>Username:</td><td><%out.print(result[6]);%></td></tr>
+                            <%
+                                }
+                            %>
+                            <tr><td>Email:</td><td><%out.print(result[2]);%></td></tr>
+                            <tr><td>Phone:</td><td><%out.print(result[3]);%></td></tr>
+                        </table>
+                        <div class="w3-margin"></div>
+                        <form class="w3-container" action="modifyAccountInfo.jsp">
+                            <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print("E" + acctID); %>'/>
+                        </form>
+                    </div>
+
+
+                </div>
+                <div class="w3-col m6">
+                    <!-- Ledgers -->
                     <!-- Account Tables-->
                     <div class="w3-container">
-                        <%                    
-                            String CheckingSQL = "SELECT CheckingID FROM checking WHERE AcctID = " + AcctID + ";";
-                            String SavingsSQL = "SELECT SavingsID FROM savings WHERE AcctID = " + AcctID + ";";
-                            String CreditSQL = "SELECT CreditID FROM credit WHERE AcctID = " + AcctID + ";";
-                            String LoanSQL = "SELECT LoanID FROM loans WHERE AcctID = " + AcctID + ";";
+                        <%
+                            String CheckingSQL = "SELECT CheckingID FROM checking WHERE AcctID = " + acctID + ";";
+                            String SavingsSQL = "SELECT SavingsID FROM savings WHERE AcctID = " + acctID + ";";
+                            String CreditSQL = "SELECT CreditID FROM credit WHERE AcctID = " + acctID + ";";
+                            String LoanSQL = "SELECT LoanID FROM loans WHERE AcctID = " + acctID + ";";
 
                             String[] ledgers;
                         %>
@@ -124,12 +165,14 @@
 
                             <!-- Checking ledgers -->
                             <%
-                                ledgers = dbConnect.queryDB(CheckingSQL);
-                                for (int i = 0; i < ledgers.length; i++) {
+                                ledgers = dbconnect.queryDB(CheckingSQL);
+                                for (int i = 0;
+                                        i < ledgers.length;
+                                        i++) {
                             %>
                             <div class="w3-card">
                                 <%
-                                    out.print(dbConnect.ledgerWidget(ledgers[i], "checking"));
+                                    out.print(dbconnect.ledgerWidget(ledgers[i], "checking"));
                                 %>
                             </div>
                             <%
@@ -139,11 +182,13 @@
 
                             <!-- Savings Ledgers -->
                             <%
-                                ledgers = dbConnect.queryDB(SavingsSQL);
-                                for (int i = 0; i < ledgers.length; i++) {
+                                ledgers = dbconnect.queryDB(SavingsSQL);
+                                for (int i = 0;
+                                        i < ledgers.length;
+                                        i++) {
                             %>
                             <div class="w3-card"><%
-                                out.print(dbConnect.ledgerWidget(ledgers[i], "savings"));
+                                out.print(dbconnect.ledgerWidget(ledgers[i], "savings"));
                                 %>
                             </div>
                             <%
@@ -153,12 +198,14 @@
 
                             <!-- Credit ledgers -->
                             <%
-                                ledgers = dbConnect.queryDB(CreditSQL);
-                                for (int i = 0; i < ledgers.length; i++) {
+                                ledgers = dbconnect.queryDB(CreditSQL);
+                                for (int i = 0;
+                                        i < ledgers.length;
+                                        i++) {
                             %>
                             <div class="w3-card">
                                 <%
-                                    out.print(dbConnect.ledgerWidget(ledgers[i], "credit"));
+                                    out.print(dbconnect.ledgerWidget(ledgers[i], "credit"));
                                 %>
                             </div>
                             <%
@@ -168,12 +215,14 @@
 
                             <!-- Loan Ledgers -->
                             <%
-                                ledgers = dbConnect.queryDB(LoanSQL);
-                                for (int i = 0; i < ledgers.length; i++) {
+                                ledgers = dbconnect.queryDB(LoanSQL);
+                                for (int i = 0;
+                                        i < ledgers.length;
+                                        i++) {
                             %>
                             <div class="w3-card">
                                 <%
-                                    out.print(dbConnect.ledgerWidget(ledgers[i], "loan"));
+                                    out.print(dbconnect.ledgerWidget(ledgers[i], "loan"));
                                 %>
                             </div>
                             <%
@@ -184,33 +233,14 @@
 
 
                     </div>
-                    <% } // END Info Display%>
                     <!-- END Accout Tables -->
 
-                </div>
-            </div>
-            <div class="w3-margin"></div>
 
-            <!-- Return button -->
-            <div class="w3-container">
-                <%
-                    switch (viewerType[0].charAt(0)) {
-                        case '0':
-                            break;
-                        case '1':
-                            break;
-                        case '2':
-                            break;
-                        case '3':
-                %>
-                <a href="adminViewAccounts.jsp" class="w3-button w3-teal">Return to Accounts</a>
-                <%
-                            break;
-                    }
-                %>
+                </div>
+
             </div>
-            
-            
         </div>
+
+
     </body>
 </html>

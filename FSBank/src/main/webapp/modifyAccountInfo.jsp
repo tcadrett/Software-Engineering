@@ -22,6 +22,15 @@
                 // remove "=Edit" leftover from form
                 selection = selection.substring(0, selection.length() - 5);
 
+                String viewerID = "-1";
+                int viewerPermiss = -1;
+                try {
+                    viewerID = session.getAttribute("acctID").toString();
+                    viewerPermiss = Integer.parseInt(dbconnect.queryDB("SELECT AcctType FROM accounts WHERE AcctID = ?;", viewerID)[0]);
+                } catch (Exception e) {
+                    // do nothing. viewerID is already -1
+                }
+
                 //String stat = selection.substring(0, 1); // Status ('A' or 'R')
                 String id = selection.substring(1); // Request ID #
 
@@ -66,6 +75,8 @@
                                    value='<%out.print(result[7]);%>' required/>
                             <hr>
 
+
+                            <%if (viewerPermiss == 3) {%>
                             <!-- Apply Session Control to only show this select option to admins" -->
                             <label>Account Type</label>
                             <select class='w3-select' name='AccountType' size='1' >
@@ -124,22 +135,27 @@
                         <option 
                             <%
                                 if (result[6].equals("2")) {
-                                        out.print(" selected ");
+                                    out.print(" selected ");
 
                                 }
                                 out.print("Value='2'>" + dbconnect.decodeAccountStatus("2"));
                             %>
                     </option>
 
-            </select>
+                </select>
+                <hr>
 
-            <hr>
-            <input type='hidden' name='acctID' value='<%out.print(id);%>'>
-            <input class="w3-button w3-teal" type='submit' value='Submit' name='Submit' />
-            <div class='w3-margin'></div>
-        </form>
+                <%} else {  // hidden versions for all but admins%> 
+                <input type="hidden" name="AccountType" value ="<%out.print(result[5]);%>"/>
+                <input type="hidden" name="AccountStatus" value="<%out.print(result[6]);%>"/>
+                <% }%>
+
+                <input type='hidden' name='acctID' value='<%out.print(id);%>'>
+                <input class="w3-button w3-teal" type='submit' value='Submit' name='Submit' />
+                <div class='w3-margin'></div>
+            </form>
+        </div>
     </div>
-</div>
 </div>
 
 </div>
