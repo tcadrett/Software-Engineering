@@ -1,0 +1,21 @@
+<!-- Return Button -->
+
+            <!-- Return button -->
+            <div class="w3-container">
+                <%
+                    
+                switch (viewerType[0].charAt(0)) {
+                        case '0':
+                            break;
+                        case '1':
+                            break;
+                        case '2':
+                            break;
+                        case '3':
+                %>
+                <a href="adminViewAccounts.jsp" class="w3-button w3-teal">Return to Accounts</a>
+                <%
+                        break;
+                }
+                %>
+            </div>

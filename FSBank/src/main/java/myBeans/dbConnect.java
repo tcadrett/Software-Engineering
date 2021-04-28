@@ -611,8 +611,8 @@ public class dbConnect {
             }
         } else {
             // DB Connection Failure
-            String[] output = new String[1];
-            output[1] = "ERROR: " + out;
+            String[] output = {""};
+            output[0] = "ERROR: " + out;
             return output;
         }
     }

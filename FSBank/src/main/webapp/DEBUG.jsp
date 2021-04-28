@@ -18,25 +18,29 @@
             <%
                 dbConnect dbconnect = new dbConnect();
                 String acctID = " ";
-                String newAcctID = " ";
-                newAcctID = request.getParameter("newAcctID");
                 String[] acctType = {" "};
 
-                if (!acctID.equals(newAcctID)) {
-                    acctID = newAcctID;
+                if (session.getAttribute("acctID") == null) {
+                    acctID = "-1";
+                    session.setAttribute("acctID", "-1");
+                }
+                if (request.getParameter("newAcctID") != null) {
+                    acctID = request.getParameter("newAcctID");
                     session.setAttribute("acctID", acctID);
                 }
-                if (acctID != null) {
-                    acctType = dbconnect.queryDB("SELECT AcctType FROM accounts WHERE acctID = ?;", acctID);
 
+                String sql = "SELECT AcctType FROM accounts WHERE acctID = " + acctID + ";";
+
+                if (!acctID.equals("-1")) {
+                    acctType = dbconnect.queryDB(sql);
                 }
-//        %>
+
+            %>
 
 
             <div class="w3-row">
                 <div class="w3-col m4">
-                    <%
-                        switch (acctType[0].charAt(0)) {
+                    <%switch (acctType[0].charAt(0)) {
                             case '1':
                     %>
                     <form action="accountDetails.jsp">
@@ -65,7 +69,8 @@
             <div class="w3-row">
 
                 <div class="w3-col-m4">
-                    <h2>Current signed in account is <%out.print(acctID);%>.</h2>
+                    <h2>Current signed in account is <%out
+                                    .print(acctID);%>.</h2>
                 </div>
 
                 <div class="w3-col m4">
