@@ -55,10 +55,10 @@
                             <form class="w3-form" action="ledgerRequestAction.jsp">
                                 <label>Ledger Type</label>
                                 <select class="w3-select" name="ledgerType">
-                                    <option value="check">Checking Account</option>
-                                    <option value="save">Savings Account</option>
-                                    <option value="credit">Credit Card</option>
-                                    <option value="loan">Loan</option>
+                                    <option value="c">Checking Account</option>
+                                    <option value="s">Savings Account</option>
+                                    <option value="r">Credit Card</option>
+                                    <option value="l">Loan</option>
                                 </select>
                                 <input type="hidden" name="acctID" value="<%out.print(acctID);%>"/>
                                 <div class="w3-margin"></div>

@@ -38,7 +38,7 @@
             try {
                 source = selection.charAt(0);
             } catch (Exception e) {
-                response.sendRedirect("login.jsp");
+                // nothing source is already ' '
             }
             switch (source) {
                 case 'M':
@@ -175,8 +175,8 @@
                         </table>
                         <div class="w3-margin"></div>
                         <form class="w3-container" action="modifyAccountInfo.jsp">
-                            <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print(
-                                           "E" + acctID); %>'/>
+                               <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print(
+                                        "E" + acctID); %>'/>
                         </form>
                         <div class="w3-margin"></div>
 
@@ -200,11 +200,10 @@
                     <!-- Account Tables-->
                     <div class="w3-container">
                         <%
-                            String CheckingSQL = "SELECT CheckingID FROM checking WHERE AcctID = " + acctID + ";";
                             String SavingsSQL = "SELECT SavingsID FROM savings WHERE AcctID = " + acctID + ";";
                             String CreditSQL = "SELECT CreditID FROM credit WHERE AcctID = " + acctID + ";";
                             String LoanSQL = "SELECT LoanID FROM loans WHERE AcctID = " + acctID + ";";
-
+                            int i = 0;
                             String[] ledgers;
                         %>
 
@@ -213,10 +212,8 @@
 
                         <!-- Checking ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB(CheckingSQL);
-                            for (int i = 0;
-                                    i < ledgers.length;
-                                    i++) {
+                            ledgers = dbconnect.queryDB("SELECT CheckingID FROM checking WHERE AcctID = ?;" + acctID);
+                            for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
                             <%
@@ -230,10 +227,8 @@
 
                         <!-- Savings Ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB(SavingsSQL);
-                            for (int i = 0;
-                                    i < ledgers.length;
-                                    i++) {
+                            ledgers = dbconnect.queryDB("SELECT SavingsID FROM savings WHERE AcctID = ?;", acctID);
+                            for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card"><%
                             out.print(dbconnect.ledgerWidget(ledgers[i], "savings"));
@@ -246,10 +241,8 @@
 
                         <!-- Credit ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB(CreditSQL);
-                            for (int i = 0;
-                                    i < ledgers.length;
-                                    i++) {
+                            ledgers = dbconnect.queryDB("SELECT CreditID FROM credit WHERE AcctID = ?;", acctID);
+                            for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
                             <%
@@ -263,10 +256,8 @@
 
                         <!-- Loan Ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB(LoanSQL);
-                            for (int i = 0;
-                                    i < ledgers.length;
-                                    i++) {
+                            ledgers = dbconnect.queryDB("SELECT LoanID FROM loans WHERE AcctID = ?;", acctID);
+                            for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
                             <%
