@@ -46,7 +46,7 @@
 
         <div class="w3-container w3-padding-32">
             <div class="w3-section">
-                <h1>Welcome <% out.print(result[0]);%></h1>
+                <h1>Welcome <% out.print(result[0]);%>!</h1>
             </div>
             <div class="w3-section">
                 <div class="w3-container">
