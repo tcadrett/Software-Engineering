@@ -37,12 +37,20 @@
             char source = selection.charAt(0);
             switch (source) {
                 case 'M':
-                    acctID = selection.substring(2, selection.length() - 8);
+                    acctID = selection.substring(1, selection.length() - 8);
                     break;
                 case 'R':
                     acctID = selection.substring(1, selection.length() - 26);
                     break;
                 case 'A':
+                    try {
+                        acctID = session.getAttribute("acctID").toString();
+                        acctID.strip();
+                    } catch (Exception e) {
+                        acctID = "-1";
+                    }
+                    break;
+                case 'D':
                     try {
                         acctID = session.getAttribute("acctID").toString();
                         acctID.strip();
@@ -75,10 +83,11 @@
             <%            // DEBUG OUTPUT
                 out.print("<div class=\"w3-container w3-card w3-margin w3-grey\">");
                 out.print("<p>DEBUG</p>");
-                out.print("<p>AcctID: " + acctID + "</p>");
-                out.print("<p>AcctPermiss: " + result[4] + "</p>");
-                out.print("<p>ViewerID: " + viewerID + "</p>");
-                out.print("<p>ViewerPermiss: " + viewerPermiss + "</p>");
+                out.print("<p>QueryString: ~~" + selection + "~~</p>");
+                out.print("<p>AcctID: ~~" + acctID + "~~</p>");
+                out.print("<p>AcctPermiss: ~~" + result[4] + "~~</p>");
+                out.print("<p>ViewerID: ~~" + viewerID + "~~</p>");
+                out.print("<p>ViewerPermiss: ~~" + viewerPermiss + "~~</p>");
 
                 out.print("<ul>");
                 for (int i = 0; i < result.length; i++) {
@@ -99,9 +108,16 @@
                 <h1>Welcome <%out.print(result[0]);%>!</h1>
                 <%
                 } else if (viewerPermiss == 2 || viewerPermiss == 3) {
+                    if (viewerID.equals(acctID)) {%>
+
+                <h1>Welcome <%out.print(result[0]);%>!</h1>
+
+
+                <%} else {
                 %>
                 <h1>Account #<%out.print(acctID);%>.</h1>
                 <%
+                        }
                     }
                 %>
             </div>
@@ -112,7 +128,8 @@
                 <div class="w3-col m6">
 
                     <%
-                        if (result[4].equals("0")) {
+                        if (result[4] != null && result[4].equals(
+                                "0")) {
                     %>
                     <div class="w3-container w3-card w3-red">
                         <h2><strong>ALERT</strong></h2>
@@ -127,7 +144,7 @@
                     <div class="w3-container">
                         <table class="w3-table">
                             <%
-                                if (viewerPermiss == 2 || viewerPermiss == 3) {
+                                if ((viewerPermiss == 2 || viewerPermiss == 3) && !viewerID.equals(acctID)) {
                             %>
                             <tr><td>First Name:</td><td><%out.print(result[0]);%></td></tr>
                             <tr><td>Last Name:</td><td><%out.print(result[1]);%></td></tr>
@@ -140,9 +157,23 @@
                         </table>
                         <div class="w3-margin"></div>
                         <form class="w3-container" action="modifyAccountInfo.jsp">
-                            <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print("E" + acctID); %>'/>
+                               <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print(
+                                        "E" + acctID); %>'/>
                         </form>
+                        <div class="w3-margin"></div>
+
+                        <%
+                            if (viewerPermiss == 3) {
+                        %>
+                        <div class="w3-margin">
+                            <a class="w3-button w3-teal" href="adminDashboard.jsp">Admin Dashboard</a>
+                        </div>
+                        <%
+                            }
+                        %>
                     </div>
+
+
 
 
                 </div>

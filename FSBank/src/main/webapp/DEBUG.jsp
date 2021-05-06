@@ -26,6 +26,7 @@
                 }
                 if (request.getParameter("newAcctID") != null) {
                     acctID = request.getParameter("newAcctID");
+                    acctID.strip();
                     session.setAttribute("acctID", acctID);
                 }
 
