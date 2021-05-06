@@ -34,7 +34,12 @@
             //  "A#=HolderAccount"
             //      DEBUG.jsp
             String acctID = "";
-            char source = selection.charAt(0);
+            char source = ' ';
+            try {
+                source = selection.charAt(0);
+            } catch (Exception e) {
+                response.sendRedirect("login.jsp");
+            }
             switch (source) {
                 case 'M':
                     acctID = selection.substring(1, selection.length() - 8);
@@ -59,11 +64,24 @@
                     }
                     break;
                 default:
-                    out.print("<h1>ERROR: Where are we from?</h1>");
+                    try {
+                        acctID = session.getAttribute("acctID").toString();
+                        acctID.strip();
+                    } catch (Exception e) {
+                        acctID = "-1";
+                    }
                     break;
             }
 
         %>
+
+        <%            //session control
+            if ((viewerPermiss == 0 || viewerPermiss == 1) && !viewerID.equals(acctID)) {
+                response.sendRedirect("accountDetails.jsp");
+            }
+        %>
+
+
         <!-- BEGIN CONTENT -->
         <div class="w3-container w3-padding-32">
 
@@ -81,23 +99,23 @@
             %>
 
             <%            // DEBUG OUTPUT
-                out.print("<div class=\"w3-container w3-card w3-margin w3-grey\">");
-                out.print("<p>DEBUG</p>");
-                out.print("<p>QueryString: ~~" + selection + "~~</p>");
-                out.print("<p>AcctID: ~~" + acctID + "~~</p>");
-                out.print("<p>AcctPermiss: ~~" + result[4] + "~~</p>");
-                out.print("<p>ViewerID: ~~" + viewerID + "~~</p>");
-                out.print("<p>ViewerPermiss: ~~" + viewerPermiss + "~~</p>");
-
-                out.print("<ul>");
-                for (int i = 0; i < result.length; i++) {
-                    out.print("<li>Index " + i + ": " + result[i] + "</li>");
-                }
-                out.print("</ul>");
-
-                out.print("</div>");
-
-            %>
+//                out.print("<div class=\"w3-container w3-card w3-margin w3-grey\">");
+//                out.print("<p>DEBUG</p>");
+//                out.print("<p>QueryString: ~~" + selection + "~~</p>");
+//                out.print("<p>AcctID: ~~" + acctID + "~~</p>");
+//                out.print("<p>AcctPermiss: ~~" + result[4] + "~~</p>");
+//                out.print("<p>ViewerID: ~~" + viewerID + "~~</p>");
+//                out.print("<p>ViewerPermiss: ~~" + viewerPermiss + "~~</p>");
+//
+//                out.print("<ul>");
+//                for (int i = 0; i < result.length; i++) {
+//                    out.print("<li>Index " + i + ": " + result[i] + "</li>");
+//                }
+//                out.print("</ul>");
+//
+//                out.print("</div>");
+//
+//            %>
 
 
             <div class="w3-container">
@@ -157,8 +175,8 @@
                         </table>
                         <div class="w3-margin"></div>
                         <form class="w3-container" action="modifyAccountInfo.jsp">
-                               <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print(
-                                        "E" + acctID); %>'/>
+                            <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print(
+                                           "E" + acctID); %>'/>
                         </form>
                         <div class="w3-margin"></div>
 
@@ -192,81 +210,83 @@
 
 
 
-                        <div class="w3-container">
 
-                            <!-- Checking ledgers -->
+                        <!-- Checking ledgers -->
+                        <%
+                            ledgers = dbconnect.queryDB(CheckingSQL);
+                            for (int i = 0;
+                                    i < ledgers.length;
+                                    i++) {
+                        %>
+                        <div class="w3-card">
                             <%
-                                ledgers = dbconnect.queryDB(CheckingSQL);
-                                for (int i = 0;
-                                        i < ledgers.length;
-                                        i++) {
+                                out.print(dbconnect.ledgerWidget(ledgers[i], "checking"));
                             %>
-                            <div class="w3-card">
-                                <%
-                                    out.print(dbconnect.ledgerWidget(ledgers[i], "checking"));
-                                %>
-                            </div>
-                            <%
-                                }
-                            %>
-                            <div class="w3-margin"></div>
-
-                            <!-- Savings Ledgers -->
-                            <%
-                                ledgers = dbconnect.queryDB(SavingsSQL);
-                                for (int i = 0;
-                                        i < ledgers.length;
-                                        i++) {
-                            %>
-                            <div class="w3-card"><%
-                                out.print(dbconnect.ledgerWidget(ledgers[i], "savings"));
-                                %>
-                            </div>
-                            <%
-                                }
-                            %>
-                            <div class="w3-margin"></div>
-
-                            <!-- Credit ledgers -->
-                            <%
-                                ledgers = dbconnect.queryDB(CreditSQL);
-                                for (int i = 0;
-                                        i < ledgers.length;
-                                        i++) {
-                            %>
-                            <div class="w3-card">
-                                <%
-                                    out.print(dbconnect.ledgerWidget(ledgers[i], "credit"));
-                                %>
-                            </div>
-                            <%
-                                }
-                            %>
-                            <div class="w3-margin"></div>
-
-                            <!-- Loan Ledgers -->
-                            <%
-                                ledgers = dbconnect.queryDB(LoanSQL);
-                                for (int i = 0;
-                                        i < ledgers.length;
-                                        i++) {
-                            %>
-                            <div class="w3-card">
-                                <%
-                                    out.print(dbconnect.ledgerWidget(ledgers[i], "loan"));
-                                %>
-                            </div>
-                            <%
-                                }
-                            %>
-                            <div class="w3-margin"></div>
                         </div>
+                        <%
+                            }
+                        %>
+                        <div class="w3-margin"></div>
+
+                        <!-- Savings Ledgers -->
+                        <%
+                            ledgers = dbconnect.queryDB(SavingsSQL);
+                            for (int i = 0;
+                                    i < ledgers.length;
+                                    i++) {
+                        %>
+                        <div class="w3-card"><%
+                            out.print(dbconnect.ledgerWidget(ledgers[i], "savings"));
+                            %>
+                        </div>
+                        <%
+                            }
+                        %>
+                        <div class="w3-margin"></div>
+
+                        <!-- Credit ledgers -->
+                        <%
+                            ledgers = dbconnect.queryDB(CreditSQL);
+                            for (int i = 0;
+                                    i < ledgers.length;
+                                    i++) {
+                        %>
+                        <div class="w3-card">
+                            <%
+                                out.print(dbconnect.ledgerWidget(ledgers[i], "credit"));
+                            %>
+                        </div>
+                        <%
+                            }
+                        %>
+                        <div class="w3-margin"></div>
+
+                        <!-- Loan Ledgers -->
+                        <%
+                            ledgers = dbconnect.queryDB(LoanSQL);
+                            for (int i = 0;
+                                    i < ledgers.length;
+                                    i++) {
+                        %>
+                        <div class="w3-card">
+                            <%
+                                out.print(dbconnect.ledgerWidget(ledgers[i], "loan"));
+                            %>
+                        </div>
+                        <%
+                            }
+                        %>
+                        <div class="w3-margin"></div>
 
 
                     </div>
                     <!-- END Accout Tables -->
 
-
+                    <div class="w3-margin"></div>
+                    <form class="w3-container" action="ledgerRequest.jsp">
+                        <input type="hidden" value="<%out.print(acctID);%>" name="acctID">
+                        <input class="w3-button w3-teal" type="submit" value="Request Ledger" name="">
+                    </form>
                 </div>
 
             </div>
