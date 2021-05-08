@@ -594,7 +594,7 @@ public class dbConnect {
     /**
      *
      * @param input input values
-     * @return String[]
+     * @return String[] // single array with data from last returned row
      */
     public String[] queryDB(String... input) {
         System.out.println("Begin Query DB");
@@ -630,6 +630,67 @@ public class dbConnect {
                         output[i] = rst.getString(i + 1);
                     }
                 }
+                closeDB(); // close the database connection
+
+                // Error if no records are found
+                if (records == 0) {
+                    output[0] = "Error: No records found";
+                }
+
+                return output;
+
+            } catch (Exception e) {
+                // SQL Failure
+                String[] output = new String[1];
+                output[0] = "ERROR: " + e.getMessage();
+                return output;
+            }
+        } else {
+            // DB Connection Failure
+            String[] output = {""};
+            output[0] = "ERROR: " + out;
+            return output;
+        }
+    }
+
+    /**
+     *
+     * @param input
+     * @return Single array with entire return rst. (First column only!)
+     */
+    public String[] queryDBdump(String... input) {
+        System.out.println("Begin Query DB");
+        String out = openDB(); // open the database connection
+        System.out.println("Opened DB");
+
+        if (out.equals("OPEN")) {
+            System.out.println("DB Open");
+            try {
+                int noArgs = input.length;
+
+                pstm = conn.prepareStatement(input[0]);
+                System.out.println(pstm);
+                for (int i = 1; i < noArgs; i++) {
+                    pstm.setString(i, input[i]);
+                }
+                System.out.println(pstm);
+
+                rst = pstm.executeQuery(); // Execute query
+
+  
+                rst.last();
+                int noOutput = rst.getRow();
+                rst.first();
+                
+                String[] output = new String[noOutput];
+                int records = 0;
+                int i = 0;
+                while (rst.next()) {
+                    records++;
+                    output[i] = rst.getString(1);
+                    i++;
+                }
+
                 closeDB(); // close the database connection
 
                 // Error if no records are found

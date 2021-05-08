@@ -176,7 +176,7 @@
                         <div class="w3-margin"></div>
                         <form class="w3-container" action="modifyAccountInfo.jsp">
                                <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print(
-                                        "E" + acctID); %>'/>
+                                           "E" + acctID); %>'/>
                         </form>
                         <div class="w3-margin"></div>
 
@@ -202,15 +202,11 @@
                         <%
                             int i = 0;
                             String[] ledgers;
-                            int noLedgers;
                         %>
-
-
-
 
                         <!-- Checking ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB("SELECT CheckingID FROM checking WHERE AcctID = ?;", acctID);
+                            ledgers = dbconnect.queryDBdump("SELECT CheckingID FROM checking WHERE AcctID = ?;", acctID);
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
@@ -218,30 +214,28 @@
                                 out.print(dbconnect.ledgerWidget(ledgers[i], "checking", viewerPermiss));
                             %>
                         </div>
+                        <div class="w3-margin"></div>
                         <%
                             }
                         %>
-                        <div class="w3-margin"></div>
 
                         <!-- Savings Ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB("SELECT SavingsID FROM savings WHERE AcctID = ?;", acctID);
-                            out.print("<p>n/o savings accounts: " + ledgers.length + "</p>"); //DEBUG
+                            ledgers = dbconnect.queryDBdump("SELECT SavingsID FROM savings WHERE AcctID = ?;", acctID);
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card"><%
                             out.print(dbconnect.ledgerWidget(ledgers[i], "savings", viewerPermiss));
                             %>
                         </div>
+                        <div class="w3-margin"></div>
                         <%
                             }
                         %>
-                        <div class="w3-margin"></div>
 
                         <!-- Credit ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB("SELECT CreditID FROM credit WHERE AcctID = ?;", acctID);
-                            out.print("<p>" + ledgers.length + "</p>"); //DEBUG
+                            ledgers = dbconnect.queryDBdump("SELECT CreditID FROM credit WHERE AcctID = ?;", acctID);
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
@@ -249,15 +243,15 @@
                                 out.print(dbconnect.ledgerWidget(ledgers[i], "credit", viewerPermiss));
                             %>
                         </div>
+                        <div class="w3-margin"></div>
+
                         <%
                             }
                         %>
-                        <div class="w3-margin"></div>
 
                         <!-- Loan Ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB("SELECT LoanID FROM loans WHERE AcctID = ?;", acctID);
-                            out.print("<p>" + ledgers.length + "</p>"); //DEBUG
+                            ledgers = dbconnect.queryDBdump("SELECT LoanID FROM loans WHERE AcctID = ?;", acctID);
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
@@ -265,10 +259,10 @@
                                 out.print(dbconnect.ledgerWidget(ledgers[i], "loan", viewerPermiss));
                             %>
                         </div>
+                        <div class="w3-margin"></div>
                         <%
                             }
                         %>
-                        <div class="w3-margin"></div>
 
 
                     </div>
