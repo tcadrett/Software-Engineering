@@ -200,11 +200,9 @@
                     <!-- Account Tables-->
                     <div class="w3-container">
                         <%
-                            String SavingsSQL = "SELECT SavingsID FROM savings WHERE AcctID = " + acctID + ";";
-                            String CreditSQL = "SELECT CreditID FROM credit WHERE AcctID = " + acctID + ";";
-                            String LoanSQL = "SELECT LoanID FROM loans WHERE AcctID = " + acctID + ";";
                             int i = 0;
                             String[] ledgers;
+                            int noLedgers;
                         %>
 
 
@@ -212,12 +210,12 @@
 
                         <!-- Checking ledgers -->
                         <%
-                            ledgers = dbconnect.queryDB("SELECT CheckingID FROM checking WHERE AcctID = ?;" + acctID);
+                            ledgers = dbconnect.queryDB("SELECT CheckingID FROM checking WHERE AcctID = ?;", acctID);
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
                             <%
-                                out.print(dbconnect.ledgerWidget(ledgers[i], "checking"));
+                                out.print(dbconnect.ledgerWidget(ledgers[i], "checking", viewerPermiss));
                             %>
                         </div>
                         <%
@@ -228,10 +226,11 @@
                         <!-- Savings Ledgers -->
                         <%
                             ledgers = dbconnect.queryDB("SELECT SavingsID FROM savings WHERE AcctID = ?;", acctID);
+                            out.print("<p>n/o savings accounts: " + ledgers.length + "</p>"); //DEBUG
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card"><%
-                            out.print(dbconnect.ledgerWidget(ledgers[i], "savings"));
+                            out.print(dbconnect.ledgerWidget(ledgers[i], "savings", viewerPermiss));
                             %>
                         </div>
                         <%
@@ -242,11 +241,12 @@
                         <!-- Credit ledgers -->
                         <%
                             ledgers = dbconnect.queryDB("SELECT CreditID FROM credit WHERE AcctID = ?;", acctID);
+                            out.print("<p>" + ledgers.length + "</p>"); //DEBUG
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
                             <%
-                                out.print(dbconnect.ledgerWidget(ledgers[i], "credit"));
+                                out.print(dbconnect.ledgerWidget(ledgers[i], "credit", viewerPermiss));
                             %>
                         </div>
                         <%
@@ -257,11 +257,12 @@
                         <!-- Loan Ledgers -->
                         <%
                             ledgers = dbconnect.queryDB("SELECT LoanID FROM loans WHERE AcctID = ?;", acctID);
+                            out.print("<p>" + ledgers.length + "</p>"); //DEBUG
                             for (i = 0; i < ledgers.length; i++) {
                         %>
                         <div class="w3-card">
                             <%
-                                out.print(dbconnect.ledgerWidget(ledgers[i], "loan"));
+                                out.print(dbconnect.ledgerWidget(ledgers[i], "loan", viewerPermiss));
                             %>
                         </div>
                         <%
@@ -271,7 +272,7 @@
 
 
                     </div>
-                    <!-- END Accout Tables -->
+                    <!-- END Account Tables -->
 
                     <div class="w3-margin"></div>
                     <form class="w3-container" action="ledgerRequest.jsp">

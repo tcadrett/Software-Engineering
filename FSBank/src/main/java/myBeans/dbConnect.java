@@ -323,7 +323,7 @@ public class dbConnect {
                 while (rst.next()) {
                     html += "<tr class='" + trStyle + "'>";
                     // Fill columns
-                    for (int i = 0; i < noCol ; i++) {
+                    for (int i = 0; i < noCol; i++) {
 
                         html += "<td class='" + tdStyle + "'>";
                         if (i == 3) {
@@ -417,13 +417,14 @@ public class dbConnect {
     /**
      * @param ledger // ledger ID
      * @param ledgerType // ledger type: checking, savings, credit, loan
+     * @param viewerPermiss // Viewer auth code. 0-Suspended 1-Viewer 2-Manager
+     * 3-Editor
      * @return html // html code for ledger widget
      */
-    public String ledgerWidget(String ledger, String ledgerType) {
+    public String ledgerWidget(String ledger, String ledgerType, int viewerPermiss) {
         String html = "";
         String[] values = {" ", " ", " ", " "};
         String[] titles = {"Title", "Balance:", "Interest:", "Card # ", "Payment Due Date:"};
-
         // populate values and titles based on account type and database output
         try {
             switch (ledgerType) {
@@ -447,6 +448,7 @@ public class dbConnect {
                     titles[3] = "Principal:";
                     break;
                 default:
+                    System.out.println("ERROR: Invalid ledger type in ledgerWidget for ID: " + ledger);
                     break;
             }
 
@@ -456,14 +458,14 @@ public class dbConnect {
                     + "                    <div class=\"w3-container\">\n"
                     + "                        <table class=\"w3-table\">\n";
 
-            System.out.println(values.length);
+            //html += "<b>" + "n/o values: " + values.length + "</b><br />"; // DEBUG
+            // Print out ledger widget html
             for (int i = 0; i < values.length; i++) {
                 if (!values[i].equals(" ")) {
-                    System.out.println(ledger + " " + ledgerType + i);
+                    //html += ("<b>" + ledger + " " + ledgerType + i + "</b><br />"); // DEBUG
 
                     html += ("<tr> <td>" + titles[i + 1] + "</td> <td>");
 
-                    //TODO FIX FORMATTING
                     switch (i) {
                         default:
                             break;
@@ -490,12 +492,46 @@ public class dbConnect {
                             break;
                     }
 
-                    html += "</td> </tr>";
+                    html += "</td></tr>";
                 }
             }
 
-            html += "                        </table>\n"
-                    + "                    </div>";
+            html += "</table>\n";
+            switch (viewerPermiss) {
+                case 0:
+                    return "";
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    html += "<form action='modifyLedger.jsp'>";
+                    html += "<input type='submit' class='w3-button w3-teal' value='edit' name='";
+                    switch (ledgerType) {
+                        case "checking":
+                            html += 'c';
+                            break;
+                        case "savings":
+                            html += 's';
+                            break;
+                        case "credit":
+                            html += 'r';
+                            break;
+                        case "loan":
+                            html += 'l';
+                            break;
+                        default:
+                            html += 'E';
+                            break;
+                    }
+                    html += '3';
+                    html += ledger;
+                    html += "'></form>";
+                    break;
+                default:
+                    break;
+            }
+            html += "<div class='w3-margin'></div></div>";
             return html;
         } catch (Exception e) {
             html = e.getMessage();

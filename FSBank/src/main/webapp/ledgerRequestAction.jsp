@@ -41,12 +41,7 @@
 
 
         <div class="w3-container w3-padding 32">
-            <h1>Hello World!</h1>
-            <p><%out.print(viewerID);%></p>
-            <p><%out.print(acctID);%></p>
-            <p><%out.print(ledgerType);%></p>
             <%
-
                 switch (ledgerType) {
                     case 'c': // checking ledger
                         defaultCheckingInt = dbconnect.queryDB("SELECT VarFloatValue FROM defaultValues WHERE VarName = 'FL_CheckingInterest';")[0];
@@ -102,12 +97,12 @@
                     out.print("<p>" + output + "</p>");
                 }
             %>
-            
-            
+
+
             <form class='w3-section' action="accountDetails.jsp">
                 <input type='submit' value='Return to Account Details' class='w3-button w3-teal' name="<%out.print("R" + acctID);%>"/>
             </form>
-            
+
         </div>
     </body>
 </html>
