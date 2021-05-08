@@ -115,7 +115,7 @@
 //
 //                out.print("</div>");
 //
-//            %>
+            %>
 
 
             <div class="w3-container">
@@ -146,8 +146,7 @@
                 <div class="w3-col m6">
 
                     <%
-                        if (result[4] != null && result[4].equals(
-                                "0")) {
+                        if (result[4] != null && result[4].equals("0")) {
                     %>
                     <div class="w3-container w3-card w3-red">
                         <h2><strong>ALERT</strong></h2>
@@ -175,8 +174,7 @@
                         </table>
                         <div class="w3-margin"></div>
                         <form class="w3-container" action="modifyAccountInfo.jsp">
-                               <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print(
-                                           "E" + acctID); %>'/>
+                            <input type='submit' value='Edit' class='w3-button w3-teal' name='<% out.print("E" + acctID); %>'/>
                         </form>
                         <div class="w3-margin"></div>
 
@@ -249,7 +247,7 @@
                             }
                         %>
 
-                        <!-- Loan Ledgers -->
+                        <!-- Loan ledgers -->
                         <%
                             ledgers = dbconnect.queryDBdump("SELECT LoanID FROM loans WHERE AcctID = ?;", acctID);
                             for (i = 0; i < ledgers.length; i++) {
@@ -260,6 +258,7 @@
                             %>
                         </div>
                         <div class="w3-margin"></div>
+
                         <%
                             }
                         %>

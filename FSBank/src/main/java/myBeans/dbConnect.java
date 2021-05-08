@@ -497,6 +497,8 @@ public class dbConnect {
             }
 
             html += "</table>\n";
+            
+            // add edit buttons
             switch (viewerPermiss) {
                 case 0:
                     return "";
