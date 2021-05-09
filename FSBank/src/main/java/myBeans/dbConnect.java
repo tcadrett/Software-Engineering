@@ -423,25 +423,29 @@ public class dbConnect {
      */
     public String ledgerWidget(String ledger, String ledgerType, int viewerPermiss) {
         String html = "";
-        String[] values = {" ", " ", " ", " "};
+        String[] values = {" ", " ", " ", " ", " "};
         String[] titles = {"Title", "Balance:", "Interest:", "Card # ", "Payment Due Date:"};
         // populate values and titles based on account type and database output
         try {
             switch (ledgerType) {
                 case "checking":
+                    System.out.println("Running check for checking ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, Interest FROM checking WHERE CheckingID = ?;", ledger);
                     titles[0] = "Checking Account # " + ledger;
                     break;
                 case "savings":
+                    System.out.println("Running check for savings ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, Interest FROM savings WHERE SavingsID = ?;", ledger);
                     titles[0] = "Savings Account # " + ledger;
                     break;
                 case "credit":
+                    System.out.println("Running check for credit ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, APR, CardNumber, DueDate FROM credit WHERE CreditID = ?;", ledger);
                     titles[0] = "Credit Account # " + ledger;
                     titles[2] = "APR:";
                     break;
                 case "loan":
+                    System.out.println("Running check for loan ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, APR, Principal, DueDate FROM loans WHERE LoanID = ?;", ledger);
                     titles[0] = "Loan Account # " + ledger;
                     titles[2] = "APR:";
@@ -461,7 +465,7 @@ public class dbConnect {
             //html += "<b>" + "n/o values: " + values.length + "</b><br />"; // DEBUG
             // Print out ledger widget html
             for (int i = 0; i < values.length; i++) {
-                if (!values[i].equals(" ")) {
+                if (values[i] != null && !values[i].equals(" ")) {
                     //html += ("<b>" + ledger + " " + ledgerType + i + "</b><br />"); // DEBUG
 
                     html += ("<tr> <td>" + titles[i + 1] + "</td> <td>");
@@ -474,7 +478,7 @@ public class dbConnect {
                             html += String.format("%.2f", Double.parseDouble(values[i]));
                             break;
                         case 1: // interest
-                            html += String.format("%.2f", Double.parseDouble(values[i]));
+                            html += String.format("%.2f", Double.parseDouble(values[i]) * 100);
                             html += "%";
                             break;
                         case 2: // principal or card number
@@ -497,7 +501,7 @@ public class dbConnect {
             }
 
             html += "</table>\n";
-            
+
             // add edit buttons
             switch (viewerPermiss) {
                 case 0:
@@ -679,11 +683,10 @@ public class dbConnect {
 
                 rst = pstm.executeQuery(); // Execute query
 
-  
                 rst.last();
                 int noOutput = rst.getRow();
                 rst.first();
-                
+
                 String[] output = new String[noOutput];
                 int records = 0;
                 int i = 0;

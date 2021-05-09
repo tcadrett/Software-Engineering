@@ -205,7 +205,7 @@
                         <!-- Checking ledgers -->
                         <%
                             ledgers = dbconnect.queryDBdump("SELECT CheckingID FROM checking WHERE AcctID = ?;", acctID);
-                            for (i = 0; i < ledgers.length; i++) {
+                            for (i = 0; i < ledgers.length - 1; i++) {
                         %>
                         <div class="w3-card">
                             <%
@@ -220,7 +220,7 @@
                         <!-- Savings Ledgers -->
                         <%
                             ledgers = dbconnect.queryDBdump("SELECT SavingsID FROM savings WHERE AcctID = ?;", acctID);
-                            for (i = 0; i < ledgers.length; i++) {
+                            for (i = 0; i < ledgers.length - 1; i++) {
                         %>
                         <div class="w3-card"><%
                             out.print(dbconnect.ledgerWidget(ledgers[i], "savings", viewerPermiss));
@@ -234,7 +234,7 @@
                         <!-- Credit ledgers -->
                         <%
                             ledgers = dbconnect.queryDBdump("SELECT CreditID FROM credit WHERE AcctID = ?;", acctID);
-                            for (i = 0; i < ledgers.length; i++) {
+                            for (i = 0; i < ledgers.length - 1; i++) {
                         %>
                         <div class="w3-card">
                             <%
@@ -250,7 +250,7 @@
                         <!-- Loan ledgers -->
                         <%
                             ledgers = dbconnect.queryDBdump("SELECT LoanID FROM loans WHERE AcctID = ?;", acctID);
-                            for (i = 0; i < ledgers.length; i++) {
+                            for (i = 0; i < ledgers.length - 1; i++) {
                         %>
                         <div class="w3-card">
                             <%

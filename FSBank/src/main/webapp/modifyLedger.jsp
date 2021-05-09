@@ -78,17 +78,22 @@
                             <input class="w3-input" type="text" name="Balance" value="<%out.print(values[0]);%>" readonly="readonly" />
 
                             <label><%out.print(titles[1]);%></label>
-                            <input class="w3-input" type="text" name="Interest" value="<%out.print(values[1]);%>" />
+                            <input class="w3-input" type="text" name="Interest" value="<%out.print(Float.parseFloat(values[1])* 100);%>" />
 
                             <label>Status</label>
                             <select class="w3-select" name="Select">
-                                <option></option>
-                                <option></option>
+                                <option value="0" <%if(values[2].equals("0")){out.print("selected");}%>>Suspended</option>
+                                <option value="1" <%if(values[2].equals("1")){out.print("selected");}%>>Requested</option>
+                                <option value="2" <%if(values[2].equals("2")){out.print("selected");}%>>Active</option>
+                                <option value="3" <%if(values[2].equals("3")){out.print("selected");}%>>Closed</option>
                             </select>
 
+                            <%if(ledgerType == 'r'){%>
                             <label>Card Number</label>
                             <input class="w3-input" type="text" name="Card" value="" />
-
+                            <%}%>
+                            
+                            
                             <label>Credit Limit</label>
                             <input class="w3-input" type="text" name="Limit" value="" />
 
