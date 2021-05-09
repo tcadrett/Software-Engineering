@@ -14,14 +14,18 @@
     <body id="myPage">
 
         <%
+
             dbConnect dbconnect = new dbConnect();
-            String query = request.getQueryString();
+            String query = request.getParameter("query");
             char editor = query.charAt(1);
             char ledgerType = query.charAt(0);
-            String ledgerID = query.substring(2, query.length() - 5);
+            String ledgerID = query.substring(2, query.length());
             String legName;
             String[] titles = {" ", " ", " ", " ", " ", " "};
             String[] values = new String[6];
+
+            String acctID = request.getParameter("acctID");
+
             switch (ledgerType) {
                 case 'c':
                     legName = "Checking";
@@ -60,6 +64,7 @@
                     legName = "ERROR: No ledger type specified.";
                     break;
             }
+
         %>
 
 
@@ -78,29 +83,49 @@
                             <input class="w3-input" type="text" name="Balance" value="<%out.print(values[0]);%>" readonly="readonly" />
 
                             <label><%out.print(titles[1]);%></label>
-                            <input class="w3-input" type="text" name="Interest" value="<%out.print(Float.parseFloat(values[1])* 100);%>" />
+                            <input class="w3-input" type="text" name="Interest" value="<%
+                                out.print(Float.parseFloat(values[1]) * 100);
+                                   %>" required />
 
                             <label>Status</label>
-                            <select class="w3-select" name="Select">
-                                <option value="0" <%if(values[2].equals("0")){out.print("selected");}%>>Suspended</option>
-                                <option value="1" <%if(values[2].equals("1")){out.print("selected");}%>>Requested</option>
-                                <option value="2" <%if(values[2].equals("2")){out.print("selected");}%>>Active</option>
-                                <option value="3" <%if(values[2].equals("3")){out.print("selected");}%>>Closed</option>
+                            <select class="w3-select" name="Status" required>
+                                <option value="0" <%if (values[2].equals("0")) {
+                                        out.print("selected");
+                                    }%>>Suspended</option>
+                                <option value="1" <%if (values[2].equals("1")) {
+                                        out.print("selected");
+                                    }%>>Requested</option>
+                                <option value="2" <%if (values[2].equals("2")) {
+                                        out.print("selected");
+                                    }%>>Active</option>
+                                <option value="3" <%if (values[2].equals("3")) {
+                                        out.print("selected");
+                                    }%>>Closed</option>
                             </select>
 
-                            <%if(ledgerType == 'r'){%>
-                            <label>Card Number</label>
-                            <input class="w3-input" type="text" name="Card" value="" />
+                            <%if (ledgerType == 'l') {%>
+                            <label>Principal</label>
+                            <input class="w3-input" type="text" name="Principal" value="<%out.print(values[3]);%>" required/>
                             <%}%>
-                            
-                            
-                            <label>Credit Limit</label>
-                            <input class="w3-input" type="text" name="Limit" value="" />
 
+                            <%if (ledgerType == 'r') {%>
+                            <label>Card Number</label>
+                            <input class="w3-input" type="text" name="CardNumber" value="<%out.print(values[3]);%>" readonly="readonly"/>
+
+                            <label>Credit Limit</label>
+                            <input class="w3-input" type="text" name="CreditLimit" value="<%out.print(values[4]);%>" required />
+                            <%}%>
+
+                            <%if (ledgerType == 'r' || ledgerType == 'l') {%>
                             <label>Payment Due Date</label>
-                            <input class="w3-input" type="text" name="DueDate" value="" />
-                            
+                            <input class="w3-input" type="text" name="DueDate" value="<%out.print(values[4]);%>" readonly="readonly" />
+                            <%}%>
+
                             <div class="w3-margin"></div>
+                            <input type="hidden" name="editor" value="<%out.print(editor);%>"/>
+                            <input type="hidden" name="ledgerType" value="<%out.print(ledgerType);%>"/>
+                            <input type="hidden" name="ledgerID" value="<%out.print(ledgerID);%>"/>
+                            <input type="hidden" name="acctID" value="<%out.print(acctID);%>"/>
                             <input class="w3-button w3-teal" type="submit" name="submit" value="Submit"/>
 
                         </form>
@@ -112,5 +137,6 @@
                 </div>
             </div>
         </div>
+
     </body>
 </html>

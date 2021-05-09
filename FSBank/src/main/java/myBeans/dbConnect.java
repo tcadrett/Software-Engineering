@@ -114,6 +114,26 @@ public class dbConnect {
 
     /**
      *
+     * @param type ledger status
+     * @return label of ledger status
+     */
+    public String decodeLedgerStatus(String type) {
+        switch (type) {
+            case "0":
+                return "Suspended";
+            case "1":
+                return "Requested";
+            case "2":
+                return "Active";
+            case "3":
+                return "Closed";
+            default:
+                return "ERROR: Invailid ledger Status";
+        }
+    }
+
+    /**
+     *
      * @param sql first column inserted as Value, subsequent columns as text
      * separated by delimiter
      * @param delim Delimiter between subsequent columns
@@ -424,46 +444,56 @@ public class dbConnect {
     public String ledgerWidget(String ledger, String ledgerType, int viewerPermiss) {
         String html = "";
         String[] values = {" ", " ", " ", " ", " "};
-        String[] titles = {"Title", "Balance:", "Interest:", "Card # ", "Payment Due Date:"};
+        String[] titles = {"Title", "Balance:", "Interest:", "Card # ", "Payment Due Date"};
+        String status = "";
+        String origAcctID = "";
         // populate values and titles based on account type and database output
         try {
             switch (ledgerType) {
                 case "checking":
                     System.out.println("Running check for checking ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, Interest FROM checking WHERE CheckingID = ?;", ledger);
+                    status = queryDB("SELECT status FROM checking WHERE CheckingID = ?", ledger)[0];
                     titles[0] = "Checking Account # " + ledger;
+                    origAcctID = queryDB("SELECT AcctID FROM checking WHERE CheckingID = ?;", ledger)[0];
                     break;
                 case "savings":
                     System.out.println("Running check for savings ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, Interest FROM savings WHERE SavingsID = ?;", ledger);
+                    status = queryDB("SELECT status FROM savings WHERE SavingsID = ?", ledger)[0];
                     titles[0] = "Savings Account # " + ledger;
+                    origAcctID = queryDB("SELECT AcctID FROM savings WHERE SavingsID = ?;", ledger)[0];
                     break;
                 case "credit":
                     System.out.println("Running check for credit ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, APR, CardNumber, DueDate FROM credit WHERE CreditID = ?;", ledger);
+                    status = queryDB("SELECT status FROM credit WHERE CreditID = ?", ledger)[0];
                     titles[0] = "Credit Account # " + ledger;
                     titles[2] = "APR:";
+                    origAcctID = queryDB("SELECT AcctID FROM credit WHERE CreditID = ?;", ledger)[0];
                     break;
                 case "loan":
                     System.out.println("Running check for loan ledger " + ledger); // DEBUG
                     values = queryDB("SELECT Balance, APR, Principal, DueDate FROM loans WHERE LoanID = ?;", ledger);
+                    status = queryDB("SELECT status FROM loans WHERE LoanID = ?", ledger)[0];
                     titles[0] = "Loan Account # " + ledger;
                     titles[2] = "APR:";
                     titles[3] = "Principal:";
+                    origAcctID = queryDB("SELECT AcctID FROM loans WHERE LoanID = ?;", ledger)[0];
                     break;
                 default:
                     System.out.println("ERROR: Invalid ledger type in ledgerWidget for ID: " + ledger);
                     break;
             }
 
+            // Print out ledger widget html
             html += "                    <div class=\"w3-container w3-teal\">\n"
                     + "                        <h2> " + titles[0] + "</h2>\n"
                     + "                    </div>\n"
                     + "                    <div class=\"w3-container\">\n"
                     + "                        <table class=\"w3-table\">\n";
-
+            html += "<tr><td>Status</td><td>" + decodeLedgerStatus(status) + "</td></tr>";
             //html += "<b>" + "n/o values: " + values.length + "</b><br />"; // DEBUG
-            // Print out ledger widget html
             for (int i = 0; i < values.length; i++) {
                 if (values[i] != null && !values[i].equals(" ")) {
                     //html += ("<b>" + ledger + " " + ledgerType + i + "</b><br />"); // DEBUG
@@ -512,7 +542,9 @@ public class dbConnect {
                     break;
                 case 3:
                     html += "<form action='modifyLedger.jsp'>";
-                    html += "<input type='submit' class='w3-button w3-teal' value='edit' name='";
+                    html += "<input type='hidden' name='acctID' value='" + origAcctID + "'/>";
+                    html += "<input type='submit' class='w3-button w3-teal' value='edit' name='submit'>";
+                    html += "<input type='hidden' name='query' value = '";
                     switch (ledgerType) {
                         case "checking":
                             html += 'c';
